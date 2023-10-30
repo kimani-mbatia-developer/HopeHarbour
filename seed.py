@@ -182,9 +182,7 @@ def seed_data(num_entries):
             user=user,
             charity=charity,
             donor=donor,
-            # frequency=frequency,
-            initial_donation_date=initial_donation_date,
-            next_donation_date=next_donation_date,
+        
         )
         db.session.add(donation)
 
