@@ -18,25 +18,6 @@ import re
 fake = Faker()
 
 
-from backend.models import (
-    User,
-    Charity,
-    Donor,
-    Application,
-    Beneficiary,
-    Story,
-    InventoryItem,
-    PaymentMethod,
-    SelectedCharity,
-    Donation,
-)
-from faker import Faker
-import random
-import re
-
-fake = Faker()
-
-
 def clean_amount(amount_str):
     cleaned_amount = float(re.sub(r"[^\d.]", "", amount_str))
     return cleaned_amount
