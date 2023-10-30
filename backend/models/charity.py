@@ -21,7 +21,8 @@ class Charity(db.Model):
     inventory_items = db.relationship("InventoryItem", back_populates="charity")
     selected_charities = db.relationship("SelectedCharity", back_populates="charity")
     donors = db.relationship("Donor", back_populates="chosen_charity")
-
+    #  relationship to PaymentMethod
+    payment_methods = db.relationship("PaymentMethod", back_populates="charity")
     # def __init__(self, name, description, user_id):
     #     self.name = name
     #     self.description = description

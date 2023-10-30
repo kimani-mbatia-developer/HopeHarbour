@@ -13,9 +13,6 @@ class User(db.Model):
 
     # Define relationships and back references
     donor = db.relationship("Donor", back_populates="user", uselist=False)
-    administrator = db.relationship(
-        "Administrator", back_populates="user", uselist=False
-    )
     charity = db.relationship("Charity", back_populates="user", uselist=False)
     # Add the 'donations' relationship with foreign key
     donations = db.relationship(
