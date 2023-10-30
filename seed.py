@@ -18,16 +18,32 @@ import re
 fake = Faker()
 
 
+from backend.models import (
+    User,
+    Charity,
+    Donor,
+    Application,
+    Beneficiary,
+    Story,
+    InventoryItem,
+    PaymentMethod,
+    SelectedCharity,
+    Donation,
+)
+from faker import Faker
+import random
+import re
+
+fake = Faker()
+
+
 def clean_amount(amount_str):
-    # Removing currency signs and commas from the string and convert to float
     cleaned_amount = float(re.sub(r"[^\d.]", "", amount_str))
     return cleaned_amount
 
 
-# Roles for users
 ROLES = ["donor", "charity", "administrator"]
 
-# Payment methods
 PAYMENT_METHODS = [
     "Mastercard",
     "Visa",
@@ -48,7 +64,6 @@ PAYMENT_METHODS = [
     "Bitcoin",
 ]
 
-# Descriptions for charities
 CHARITY_DESCRIPTIONS = [
     "Connecting communities in need with vital support.",
     "Join us in making the world a better place.",
@@ -56,10 +71,8 @@ CHARITY_DESCRIPTIONS = [
     "Your support changes lives every day.",
 ]
 
-# Application status
 APPLICATION_STATUSES = ["Pending", "Approved", "Rejected"]
 
-# Donation frequency
 DONATION_FREQUENCIES = ["one-time", "daily", "weekly", "monthly", "quarterly"]
 
 
@@ -72,7 +85,6 @@ def seed_data(num_entries):
         username = fake.user_name()
         email = fake.email()
         password = "your_password_here"
-
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
         role = random.choice(ROLES)
@@ -125,11 +137,14 @@ def seed_data(num_entries):
             db.session.add(beneficiary)
             beneficiaries.append(beneficiary)
 
-        # Seed Story
         for _ in range(random.randint(0, 5)):
             title = fake.catch_phrase()
             beneficiaries_names = [beneficiary.name for beneficiary in beneficiaries]
-            story_content = fake.paragraph(ext_word_list=beneficiaries_names)
+            try:
+                story_content = fake.paragraph(ext_word_list=beneficiaries_names)
+            except Exception as e:
+                print(f"Error generating story content: {e}")
+                story_content = "Fallback story content if generation fails"
             story = Story(
                 title=title,
                 content=story_content,
@@ -172,7 +187,6 @@ def seed_data(num_entries):
         amount = clean_amount(amount_str)
         anonymous = random.choice([True, False])
         charity = random.choice(charities)
-        # frequency = random.choice(DONATION_FREQUENCIES)
         initial_donation_date = fake.date_between(start_date="-1y", end_date="today")
         next_donation_date = fake.date_between_dates(date_start=initial_donation_date)
         recurring = frequency != "one-time"
@@ -182,7 +196,6 @@ def seed_data(num_entries):
             user=user,
             charity=charity,
             donor=donor,
-            # frequency=frequency,
             initial_donation_date=initial_donation_date,
             next_donation_date=next_donation_date,
         )
