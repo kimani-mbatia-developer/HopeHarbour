@@ -123,7 +123,7 @@ function Home(){
                 </div>
                 <img src={image2} style={{width:"60%", height:"612px", position:"relative",marginLeft:"-3%"}}></img>
                 <div className='container' style={infoSquare}>
-                    <p style={infoSquareText}>Join Hopeharbour’s network of charities, ranked among the most impactful globally</p>
+                    <p style={infoSquareText}>Join Hopeharbour's network of charities, ranked among the most impactful globally</p>
                 </div>
             </div>
 
