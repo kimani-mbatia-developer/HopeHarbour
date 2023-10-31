@@ -7,8 +7,8 @@ from flask import Flask
 from flask_cors import CORS
 from backend.models.common import bcrypt, db, jwt
 from flask_migrate import Migrate
-
-# from backend.routes.route_auth import authenticate, identity
+from backend.routes.auth_route import authenticate, identity
+from flask_restx import Api
 
 migrate = Migrate()
 
@@ -16,7 +16,6 @@ migrate = Migrate()
 app = Flask(__name__, instance_relative_config=False)
 
 secret_key = os.urandom(32).hex()
-
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 # app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -31,6 +30,30 @@ migrate.init_app(app, db)
 # Initialize CORS for cross-origin requests
 cors = CORS(app)
 
+# Instance of the API
+api = Api(
+    app,
+    version="1.0",
+    title="HopeHarbour API",
+    description="API for HopeHarbour application",
+)
+
+
+app_swagger = Flask(__name__)
+CORS(app_swagger)
+
+api_swagger = Api(
+    app_swagger,
+    version="1.0",
+    title="Swagger Documentation",
+    description="Documentation for HopeHarbour API",
+)
+
+
+@app_swagger.route("/swagger")
+def show_swagger():
+    return api_swagger.documentation
+
 
 # # Import the database models here
 from backend.models.user import User
@@ -44,6 +67,20 @@ from backend.models.selected_charity import SelectedCharity
 from backend.models.inventory_item import InventoryItem
 from backend.models.payment_method import PaymentMethod
 from backend.models.donation_reminder import Reminder
+
+
+# Define your routes here
+from backend.routes.auth_route import auth_bp, auth_ns
+from backend.routes.admin_route import admin_bp, admin_ns
+
+# Register Blueprints
+app.register_blueprint(auth_bp)
+app.register_blueprint(admin_bp)
+
+
+# Add the  namespaces to the Swagger API
+api.add_namespace(auth_ns)
+api.add_namespace(admin_ns)
 
 
 @app.route("/")
