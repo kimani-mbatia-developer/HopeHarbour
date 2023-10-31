@@ -13,6 +13,9 @@ flask-bcrypt = "*"
 flask-jwt-extended = "*"
 faker = "*"
 apscheduler = "*"
+flask-restx = "*"
+gunicorn = "*"
+werkzeug = "*"
 
 [dev-packages]
 
