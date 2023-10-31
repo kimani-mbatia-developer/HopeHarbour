@@ -1,7 +1,10 @@
 import React from 'react';
 import logo from './assets/images/Hopeharbour.png'
+import {useNavigate} from 'react-router-dom';
 
 function Navbar(){
+
+    const navigate = useNavigate()
 
     const navbarStyle={
         backgroundColor:"#E9E9E9",
@@ -44,10 +47,10 @@ function Navbar(){
                             <img src={logo} style={logoStyle}></img>
                     </div>
                         <div className='container-fluid' style={{position:"relative",left:"75%",top:"-30px"}}>
-                            <button style={navButtonStyle}>Home</button>
+                            <button style={navButtonStyle} onClick={()=>navigate('/')}>Home</button>
                             <button style={navButtonStyle}>About Us</button>
                             <button style={navButtonStyle}>Login</button>
-                            <button style={signUpButtonStyle}>Sign Up</button>
+                            <button style={signUpButtonStyle} onClick={()=>navigate('signup')}>Sign Up</button>
 
                         </div>
             </div>
