@@ -72,10 +72,12 @@ from backend.models.donation_reminder import Reminder
 # Define your routes here
 from backend.routes.auth_route import auth_bp, auth_ns
 from backend.routes.admin_route import admin_bp, admin_ns
+from backend.routes.email_route import email
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(email)
 
 
 # Add the  namespaces to the Swagger API
