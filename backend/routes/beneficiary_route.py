@@ -57,7 +57,7 @@ beneficiary_response_model = beneficiaries_ns.model(
 
 
 # Route to get all beneficiaries with pagination
-@beneficiaries_ns.route("/list", methods=["GET"])
+@beneficiaries_ns.route("/", methods=["GET"])
 class GetBeneficiaries(Resource):
     @beneficiaries_ns.doc("Get all beneficiaries with pagination")
     @beneficiaries_ns.marshal_with(
@@ -85,6 +85,7 @@ class GetBeneficiaries(Resource):
             "total_pages": beneficiaries.pages,
             "total_items": beneficiaries.total,
         }
+
 
 
 # Route to create a beneficiary for a charity

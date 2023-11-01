@@ -5,7 +5,7 @@ from backend.models.donation import Donation
 from backend.models.common import db
 from flask_restx import Resource, Namespace, fields
 
-donations_bp = Blueprint("donations", __name__)
+donations_bp = Blueprint("donations", __name__, url_prefix="/donations")
 donations_ns = Namespace("donations", description="Donation operations")
 
 
@@ -58,7 +58,7 @@ donations_response_model = donations_ns.model(
 
 
 # Route to get all donations with pagination
-@donations_ns.route("/donations", methods=["GET"])
+@donations_ns.route("/", methods=["GET"])
 class GetDonations(Resource):
     @donations_ns.doc("Get all donations with pagination")
     @donations_ns.marshal_with(
@@ -80,16 +80,18 @@ class GetDonations(Resource):
             for donation in donations.items
         ]
 
-        return {
-            "donations": donation_data,
-            "page": donations.page,
-            "total_pages": donations.pages,
-            "total_items": donations.total,
-        }
+        return jsonify(
+            {
+                "donations": donation_data,
+                "page": donations.page,
+                "total_pages": donations.pages,
+                "total_items": donations.total,
+            }
+        )
 
 
 # Route to make a donation to a charity
-@donations_ns.route("/donations/donate", methods=["POST"])
+@donations_ns.route("/donate", methods=["POST"])
 class CreateDonation(Resource):
     @donations_ns.doc("Make a donation to a charity")
     @donations_ns.expect(donation_model)
