@@ -78,10 +78,12 @@ from backend.routes.donors_route import donors_bp, donors_ns
 from backend.routes.donations_route import donations_bp, donations_ns
 from backend.routes.applications_route import applications_bp, applications_ns
 from backend.routes.beneficiary_route import beneficiaries_bp, beneficiaries_ns
+from backend.routes.email_route import email
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(email)
 app.register_blueprint(charities_bp)
 app.register_blueprint(donors_bp)
 app.register_blueprint(donations_bp)
