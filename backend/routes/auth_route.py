@@ -9,7 +9,7 @@ auth_ns = Namespace("auth", description="Authentication operations")
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 # Common response model
-response_model = auth_ns.model(
+auth_response_model = auth_ns.model(
     "ResponseModel",
     {
         "message": fields.String(description="A message describing the response"),
@@ -45,7 +45,7 @@ class RegisterUser(Resource):
         )
     )
     @auth_ns.marshal_with(
-        response_model, code=201, description="User registered successfully"
+        auth_response_model, code=201, description="User registered successfully"
     )
     def post(self):
         data = request.get_json()
@@ -77,8 +77,8 @@ class LoginUser(Resource):
             },
         )
     )
-    @auth_ns.marshal_with(response_model, code=200, description="Login successful")
-    @auth_ns.marshal_with(response_model, code=401, description="Login failed")
+    @auth_ns.marshal_with(auth_response_model, code=200, description="Login successful")
+    @auth_ns.marshal_with(auth_response_model, code=401, description="Login failed")
     def post(self):
         data = request.get_json()
         email = data.get("email")
@@ -87,8 +87,8 @@ class LoginUser(Resource):
         user = User.query.filter_by(email=email).first()
 
         if user and bcrypt.check_password_hash(user.password, password):
-            response, access_token = create_response_with_jwt_token(identity=user.id)
-            return response, 200, {"Set-Cookie": f"access_token={access_token}"}
+            response, token = create_response_with_jwt_token(identity=user.id)
+            return response, 200, token
         else:
             return {"message": "Login failed", "data": None}, 401
 
@@ -98,7 +98,7 @@ class LogoutUser(Resource):
     @auth_ns.doc("Logout a user")
     @jwt_required
     @auth_ns.marshal_with(
-        response_model, code=200, description="User logged out successfully"
+        auth_response_model, code=200, description="User logged out successfully"
     )
     def post(self):
         response = make_response("User logged out successfully")
