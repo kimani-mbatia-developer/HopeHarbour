@@ -7,7 +7,8 @@ function Login(){
     const mainStyle={
         position:"relative",
         display:"flex",
-        overflow: "hidden"
+        overflow: "hidden",
+        backgroundColor:"#77C5D6"
     }
 
     const vector6Style={
@@ -16,8 +17,8 @@ function Login(){
 
     const vector13Style={
         position:"relative",
-        left:"-20%",
-        width:"77%"
+        left:"20%",
+        //width:"77%"
     }
 
     const infoSquare={
@@ -39,17 +40,25 @@ function Login(){
 
     const loginHeader={
         position:"relative",
-        marginTop:"10%",
+        top:"10%",
         fontSize:"36px",
         fontFamily:"FaunaOne",
         fontWeight:"Bold",
         color:"white"
     }
 
-
     const signUpHeader2={
         position:"relative",
-        marginTop:"1%",
+        marginTop:"12%",
+        fontSize:"16px",
+        fontFamily:"FaunaOne",
+        fontWeight:"Bold",
+        color:"white"
+    }
+
+    const signUpHeader3={
+        position:"relative",
+        paddingTop:"10px",
         fontSize:"16px",
         fontFamily:"FaunaOne",
         fontWeight:"Bold",
@@ -63,8 +72,6 @@ function Login(){
         backgroundColor:"#569DDF",
         borderRadius:"50px",
         textAlign:"center",
-        left:"-60%",
-        marginTop:"5%"
     }
 
     const inputField={
@@ -96,27 +103,26 @@ function Login(){
 
     return(
         <div className="container-fluid" style={mainStyle}>
-            <img src={vector6} style={vector6Style}></img>
             <img src={vector13} style={vector13Style}></img>
-            <div className='container' style={infoSquare}>
+{/*             <div className='container' style={infoSquare}>
                     <p style={infoSquareText}>Join Hopeharbour's network of charities, ranked among the most impactful globally</p>
+            </div> */}
+            <div className="container" style={{position:"relative", left:"-25%",marginTop:"5%"}}>
+                <div className='container' style={loginForm}>
+                    <h4 style={loginHeader}>Login</h4>
+                    <h6 style={signUpHeader2}>as a Donor</h6>
+                    <div className='container'>
+                        <input style={inputField} type='text' placeholder='Email'></input>
+                        <input style={inputField} type='text' placeholder='Password'></input>
+                    </div>
+                    <div className='container' style={{paddingTop:"30px"}}>
+                        <button style={loginButtonStyle}>Login</button>
+                        <h6 style={signUpHeader3}>Don't have an account?</h6>
+                        <button style={loginButtonStyle}>Sign Up</button>
+                    </div>                    
+                </div>
             </div>
-            <div className='container' style={loginForm}>
-                <h4 style={loginHeader}>Login</h4>
-                <h6 style={signUpHeader2}>as a Donor</h6>
-                <div className='container'>
-                    <input style={inputField} type='text' placeholder='Email'></input>
-                    <input style={inputField} type='text' placeholder='Password'></input>
-                </div>
-                <div className='container' style={{paddingTop:"30px"}}>
-                    <button style={loginButtonStyle}>Login</button>
-                </div>
-                <div className='container' style={{paddingTop:"30px"}}>
-                    <h6 style={signUpHeader2}>Don't have an account?</h6>
-                    <button style={loginButtonStyle}>Sign Up</button>
-                </div>
-                
-            </div>
+
         </div>
     )
 }

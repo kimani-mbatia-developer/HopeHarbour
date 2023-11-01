@@ -7,8 +7,11 @@ import RegisterCharity from './registercharity';
 import Login from './login';
 import Footer from './footer';
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom'; 
+import { useState } from 'react';
 
 function App() {
+  let [isLoggedIn, setIsLoggedIn] = useState(false)
+  
   return (
     <div>
 
