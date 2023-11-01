@@ -47,7 +47,8 @@ def send_donation_reminder():
                     send_email(subject, body, donor.email)
                     
                     # Update the next_donation_date
-                    donor.next_donation_date = next_reminder_date
+                    donor.next_donation
+                    date = next_reminder_date
 
         # Commit the changes to the database
         db.session.commit()
