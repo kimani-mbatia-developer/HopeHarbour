@@ -17,8 +17,8 @@ app = Flask(__name__, instance_relative_config=False)
 
 secret_key = os.urandom(32).hex()
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
-# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 app.config["SECRET_KEY"] = secret_key
