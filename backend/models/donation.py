@@ -19,6 +19,7 @@ class Donation(db.Model):
         "Donor", back_populates="donations", foreign_keys="[Donation.donor_id]"
     )  # Define the donor relationship
     charity = db.relationship("Charity", back_populates="donations")
+    donation_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, amount, anonymous, user, charity, donor):
         self.amount = amount

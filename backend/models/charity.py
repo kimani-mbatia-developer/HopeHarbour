@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from backend.models.common import db
 from backend.models.donation import Donation
 from backend.models.user import User
@@ -35,8 +36,8 @@ class Charity(db.Model):
     @total_donation_amount.expression
     def total_donation_amount(cls):
         return (
-            db.select([db.func.sum(Donation.amount)])
-            .where(Donation.charity_id == cls.id)
+            db.session.query(func.sum(Donation.amount))
+            .filter(Donation.charity_id == cls.id)
             .label("total_donation_amount")
         )
 

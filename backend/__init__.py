@@ -98,7 +98,7 @@ api.add_namespace(admin_ns)
 api.add_namespace(charities_ns)
 api.add_namespace(donors_ns)
 api.add_namespace(donations_ns)
-# api.add_namespace(stories_ns)
+api.add_namespace(stories_ns)
 api.add_namespace(applications_ns)
 api.add_namespace(beneficiaries_ns)
 

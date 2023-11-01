@@ -16,6 +16,7 @@ apscheduler = "*"
 flask-restx = "*"
 gunicorn = "*"
 werkzeug = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

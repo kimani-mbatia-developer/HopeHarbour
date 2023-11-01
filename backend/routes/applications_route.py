@@ -55,7 +55,7 @@ applications_response_model = applications_ns.model(
 
 
 # Route to get all pending charity applications with pagination
-@applications_ns.route("/applications", methods=["GET"])
+@applications_ns.route("", methods=["GET"])
 class GetApplications(Resource):
     @applications_ns.doc("Get all pending charity applications with pagination")
     @applications_ns.marshal_with(
@@ -83,11 +83,8 @@ class GetApplications(Resource):
         }
 
 
-
-
-
 # Route to get all pending charity applications
-@applications_ns.route("/applications/pending", methods=["GET"])
+@applications_ns.route("/pending", methods=["GET"])
 class GetPendingApplications(Resource):
     @applications_ns.doc("Get all pending charity applications")
     @applications_ns.marshal_with(
@@ -98,7 +95,7 @@ class GetPendingApplications(Resource):
     def get(self):
         pending_applications = Application.query.filter_by(status="Pending").all()
         application_data = [
-            {"id": app.id, "charity_name": app.charity_name, "status": app.status}
+            {"id": app.id, "charity_name": app.charity.name, "status": app.status}
             for app in pending_applications
         ]
         return {
