@@ -116,6 +116,7 @@ def seed_data(num_entries):
         for _ in range(random.randint(0, 5)):
             application = Application(charity_name=fake.company())
             application.charity = random.choice(charities)
+            application.status = random.choice(APPLICATION_STATUSES)
             db.session.add(application)
 
         for _ in range(random.randint(0, 5)):
@@ -182,7 +183,6 @@ def seed_data(num_entries):
             user=user,
             charity=charity,
             donor=donor,
-        
         )
         db.session.add(donation)
 
@@ -192,7 +192,6 @@ def seed_data(num_entries):
 # Create a Flask application context
 with app.app_context():
     # Delete existing records in the tables
-    Donor.query.delete()
     Application.query.delete()
     Story.query.delete()
     Beneficiary.query.delete()
@@ -201,6 +200,7 @@ with app.app_context():
     SelectedCharity.query.delete()
     Donation.query.delete()
     Charity.query.delete()
+    Donor.query.delete()
     User.query.delete()
 
     # Number of entries to create

@@ -4,12 +4,13 @@ from flask_restx import Namespace, Resource, fields, reqparse
 from sqlalchemy import func
 from backend.models import charity
 from backend.models.application import Application
+from backend.models.beneficiary import Beneficiary
 from backend.models.charity import Charity
 from backend.models.common import db
 from backend.models.donation import Donation
 from backend.models.story import Story
 
-charities_bp = Blueprint("charities", __name__)
+charities_bp = Blueprint("charities", __name__, url_prefix="/charities")
 charities_ns = Namespace("charities", description="Charity operations")
 
 # Define models for request and response data
@@ -42,10 +43,32 @@ total_donation_model = charities_ns.model(
 )
 
 
+# Model for creating a beneficiary for a charity
+create_beneficiary_model = charities_ns.model(
+    "CreateBeneficiaryModel",
+    {
+        "name": fields.String(required=True, description="Name of the beneficiary"),
+        "charity_id": fields.Integer(
+            required=True,
+            description="ID of the charity associated with the beneficiary",
+        ),
+    },
+)
+
+
+beneficiary_response_model = charities_ns.model(
+    "ResponseModel",
+    {
+        "message": fields.String(description="A message describing the response"),
+        "data": fields.Raw(description="Response data, if applicable"),
+    },
+)
+
+
 # Route to get a list of charities
-@charities_ns.route("/charities")
+@charities_ns.route("/")
 class CharitiesResource(Resource):
-    @charities_ns.doc(description="Get a list of charities with Approved applications")
+    @charities_ns.doc(description="Get a list of charities with Approved status")
     @charities_ns.expect(
         charities_ns.parser()
         .add_argument("page", type=int, help="Page number", default=1)
@@ -56,10 +79,19 @@ class CharitiesResource(Resource):
         page = request.args.get("page", default=1, type=int)
         per_page = request.args.get("per_page", default=10, type=int)
 
-        # Filter charities with "Approved" application status
-        charities = Charity.query.filter_by(application_status="Approved").paginate(
+        # Query all "Approved" applications
+        approved_applications = Application.query.filter(
+            Application.status == "Approved"
+        ).all()
+
+        # Extract the charity IDs from approved applications
+        charity_ids = [application.charity_id for application in approved_applications]
+
+        # Filter charities based on the charity IDs
+        charities = Charity.query.filter(Charity.id.in_(charity_ids)).paginate(
             page=page, per_page=per_page, error_out=False
         )
+
         charity_data = [
             {"id": charity.id, "name": charity.name} for charity in charities.items
         ]
@@ -68,7 +100,7 @@ class CharitiesResource(Resource):
 
 
 # Route to view the total amount donated to the charity
-@charities_ns.route("/charities/total-donations/<int:charity_id>")
+@charities_ns.route("/total-donations/<int:charity_id>")
 class TotalDonationsResource(Resource):
     @charities_ns.doc(description="View the total amount donated to the charity")
     @charities_ns.response(
@@ -88,7 +120,7 @@ class TotalDonationsResource(Resource):
 
 
 # Route to submit a charity application
-@charities_ns.route("/charities/apply")
+@charities_ns.route("/apply")
 class ApplyCharityResource(Resource):
     @charities_ns.doc(description="Submit a charity application")
     @charities_ns.expect(
@@ -124,7 +156,7 @@ class ApplyCharityResource(Resource):
 
 
 # Route to get details of a specific charity
-@charities_ns.route("/charities/<int:charity_id>")
+@charities_ns.route("/<int:charity_id>")
 class GetCharityResource(Resource):
     @charities_ns.doc(description="Get details of a specific charity")
     @charities_ns.response(
@@ -146,7 +178,7 @@ class GetCharityResource(Resource):
 
 
 # Route to set up charity details
-@charities_ns.route("/charities/setup/<int:charity_id>")
+@charities_ns.route("/setup/<int:charity_id>")
 class SetupCharityResource(Resource):
     @charities_ns.doc(description="Set up charity details")
     @charities_ns.expect(charity_model)
@@ -171,7 +203,7 @@ class SetupCharityResource(Resource):
 
 
 # Route to view donors and their donations (including anonymous donors)
-@charities_ns.route("/charities/donors/<int:charity_id>")
+@charities_ns.route("/donors/<int:charity_id>")
 class ViewDonorsResource(Resource):
     @charities_ns.doc(description="View donors and their donations")
     @charities_ns.response(200, "Success")  # Document the "Success" response
@@ -204,7 +236,7 @@ class ViewDonorsResource(Resource):
 
 
 # Route to create and post a story about beneficiaries
-@charities_ns.route("/charities/stories/create")
+@charities_ns.route("/stories/create")
 class CreateStoryResource(Resource):
     @charities_ns.doc(description="Create and post a story about beneficiaries")
     @charities_ns.expect(
@@ -236,7 +268,7 @@ class CreateStoryResource(Resource):
 
 
 # Define the /donations/anonymous-amount route within the charities_bp Blueprint
-@charities_ns.route("/donations/anonymous-amount")
+@charities_ns.route("/anonymous-amount")
 class AnonymousDonationsAmountResource(Resource):
     @charities_ns.doc(description="Get the total amount donated by anonymous donors")
     @charities_ns.response(200, "Success")  # Document the "Success" response
@@ -258,37 +290,30 @@ class AnonymousDonationsAmountResource(Resource):
             return {"total_anonymous_donations": 0}, 200
 
 
-# Route to submit a charity application
-@charities_ns.route("/charities/apply")
-class ApplyCharityResource(Resource):
-    @charities_ns.doc(description="Submit a charity application")
-    @charities_ns.expect(
-        charities_ns.model(
-            "CharityApplication",
-            {
-                "name": fields.String(
-                    required=True, description="The name of the charity"
-                ),
-                "description": fields.String(
-                    description="The description of the charity"
-                ),
-            },
-        )
-    )
+# Route to create a beneficiary for a charity
+@charities_ns.route("/create-beneficiary", methods=["POST"])
+class CreateCharityBeneficiary(Resource):
+    @charities_ns.doc("Create a beneficiary for a charity")
+    @charities_ns.expect(create_beneficiary_model)
     @charities_ns.marshal_with(
-        charities_response_model,
+        beneficiary_response_model,
         code=201,
-        description="Application submitted successfully",
+        description="Beneficiary created successfully",
     )
-    @jwt_required()
     def post(self):
         data = request.get_json()
         name = data.get("name")
-        description = data.get("description")
+        charity_id = data.get("charity_id")
 
-        # Create a new application
-        application = Application(charity_name=name)
-        db.session.add(application)
+        # Check if the charity exists
+        charity = Charity.query.get(charity_id)
+        if not charity:
+            return {"message": "Charity not found"}, 404
+
+        # Create a new beneficiary
+        beneficiary = Beneficiary(name=name, charity_id=charity_id)
+
+        db.session.add(beneficiary)
         db.session.commit()
 
-        return {"message": "Application submitted successfully", "data": None}, 201
+        return {"message": "Beneficiary created successfully"}, 201
