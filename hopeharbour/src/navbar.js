@@ -49,7 +49,7 @@ function Navbar(){
                         <div className='container-fluid' style={{position:"relative",left:"75%",top:"-30px"}}>
                             <button style={navButtonStyle} onClick={()=>navigate('/')}>Home</button>
                             <button style={navButtonStyle}>About Us</button>
-                            <button style={navButtonStyle}>Login</button>
+                            <button style={navButtonStyle} onClick={()=>navigate('/login')}>Login</button>
                             <button style={signUpButtonStyle} onClick={()=>navigate('signup')}>Sign Up</button>
 
                         </div>
