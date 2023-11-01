@@ -72,15 +72,33 @@ from backend.models.donation_reminder import Reminder
 # Define your routes here
 from backend.routes.auth_route import auth_bp, auth_ns
 from backend.routes.admin_route import admin_bp, admin_ns
+from backend.routes.stories_route import stories_bp, stories_ns
+from backend.routes.charities_route import charities_bp, charities_ns
+from backend.routes.donors_route import donors_bp, donors_ns
+from backend.routes.donations_route import donations_bp, donations_ns
+from backend.routes.applications_route import applications_bp, applications_ns
+from backend.routes.beneficiary_route import beneficiaries_bp, beneficiaries_ns
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(charities_bp)
+app.register_blueprint(donors_bp)
+app.register_blueprint(donations_bp)
+app.register_blueprint(applications_bp)
+app.register_blueprint(beneficiaries_bp)
+app.register_blueprint(stories_bp)
 
 
-# Add the  namespaces to the Swagger API
+# Add the namespaces to the Swagger API
 api.add_namespace(auth_ns)
 api.add_namespace(admin_ns)
+api.add_namespace(charities_ns)
+api.add_namespace(donors_ns)
+api.add_namespace(donations_ns)
+# api.add_namespace(stories_ns)
+api.add_namespace(applications_ns)
+api.add_namespace(beneficiaries_ns)
 
 
 @app.route("/")
