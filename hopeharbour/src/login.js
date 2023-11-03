@@ -7,6 +7,8 @@ function Login(){
 
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
+    const [loginAttempt, setLoginAttempt]=useState(false)
+    const [loginMessage, setLoginMessage]=useState("")
 
 
     function handleEmailInput(event){
@@ -20,6 +22,8 @@ function Login(){
 
     function handleLogin(){
         //event.preventDefault()
+
+        /*
         try{
             const response = fetch('https://hopeharbour-api.onrender.com/auth/login',{
             method:'POST',
@@ -37,6 +41,30 @@ function Login(){
         }catch(error){
             alert('Error',error)
         }
+        */
+
+
+         fetch('https://hopeharbour-api.onrender.com/auth/login',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                email:email,
+                password: password,
+            }),
+        })
+        //.then(res =>res.json())
+        .then(res=> res.json())
+        .then((data)=>{
+            alert(data.message)
+            setLoginMessage(data.message)
+            //alert(loginStatus)
+            setLoginAttempt(true)
+        })
+        //.then(setLoginAttempt(true))
+
+
     }
 
     const mainStyle={
@@ -154,7 +182,26 @@ function Login(){
                         <button style={loginButtonStyle} onClick={handleLogin}>Login</button>
                         <h6 style={signUpHeader3}>Don't have an account?</h6>
                         <button style={loginButtonStyle} >Sign Up</button>
-                    </div>                    
+                    </div>
+
+
+                            {loginAttempt?(
+                                <div className="container" style={{height:"90%",marginTop:"5%"}}>
+                                    {loginMessage==="Login Failed"?(
+                                         <div className="container" style={{height:"10%",borderRadius:"30px",backgroundColor:"green",marginTop:"5%"}}>
+                                            <h6 style={signUpHeader3}>{loginMessage}</h6>
+                                         </div>
+                                        
+                                        ):(
+                                        <div className="container" style={{height:"10%",borderRadius:"30px",backgroundColor:"red",marginTop:"5%"}}>
+                                            <h6 style={signUpHeader3}>{loginMessage}</h6>
+                                         </div>
+                                        )}
+
+                                
+                            </div>):(<div></div>)}
+                    
+                    
                 </div>
             </div>
 
