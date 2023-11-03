@@ -1,14 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import vector6 from './assets/images/login/Vector 6.png'
 import vector13 from './assets/images/login/Vector 13.png'
+import { useState } from "react";
 
 function Login(){
+
+    const [email,setEmail]=useState("")
+    const [password,setPassword]=useState("")
+
+
+    function handleEmailInput(event){
+        setEmail(event.target.value)
+    }
+
+    function handlePasswordInput(event){
+        setPassword(event.target.value)
+    }
+    
+
+    function handleLogin(){
+        //event.preventDefault()
+        try{
+            const response = fetch('https://hopeharbour-api.onrender.com/auth/login',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                email:email,
+                password: password,
+            }),
+        });
+
+        if (response.ok){alert("Login Succesful", response.message)}
+
+        }catch(error){
+            alert('Error',error)
+        }
+    }
 
     const mainStyle={
         position:"relative",
         display:"flex",
         overflow: "hidden",
-        backgroundColor:"#77C5D6"
+        //backgroundColor:"#77C5D6"
     }
 
     const vector6Style={
@@ -112,13 +147,13 @@ function Login(){
                     <h4 style={loginHeader}>Login</h4>
                     <h6 style={signUpHeader2}>as a Donor</h6>
                     <div className='container'>
-                        <input style={inputField} type='text' placeholder='Email'></input>
-                        <input style={inputField} type='text' placeholder='Password'></input>
+                        <input style={inputField} type='text' placeholder='Email' onChange={handleEmailInput}></input>
+                        <input style={inputField} type='password' placeholder='Password' onChange={handlePasswordInput}></input>
                     </div>
                     <div className='container' style={{paddingTop:"30px"}}>
-                        <button style={loginButtonStyle}>Login</button>
+                        <button style={loginButtonStyle} onClick={handleLogin}>Login</button>
                         <h6 style={signUpHeader3}>Don't have an account?</h6>
-                        <button style={loginButtonStyle}>Sign Up</button>
+                        <button style={loginButtonStyle} >Sign Up</button>
                     </div>                    
                 </div>
             </div>

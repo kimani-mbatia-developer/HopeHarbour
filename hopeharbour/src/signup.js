@@ -6,7 +6,70 @@ import image4 from './assets/images/signup/image4.png'
 function SignUp(){
     const navigate = useNavigate()
 
-    const [inputDetails, setInputDetails]=useState([]);
+    const [userName,setUserName]=useState("")
+    const [email,setEmail]=useState("")
+    const [password,setPassword]=useState("")
+
+    const [inputDetails, setInputDetails]=useState({
+        userName:'',
+        email:'',
+        password:'',
+        role:'donor'
+    });
+    
+    function handleSubmit(event){
+        event.preventDefault()
+        const input ={
+            userName: userName,
+            email:email,
+            password:password,
+            role: "donor"
+        }
+
+        setInputDetails(input)
+
+        alert(inputDetails.password)
+        try{
+            const response = fetch('https://hopeharbour-api.onrender.com/auth/register',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                username:userName,
+                email: email,
+                password: password,
+                role: "donor"
+            }),
+        });
+
+        if (response.ok){alert("Donor Account Succesfully created", response.message)}
+
+        }catch(error){
+            alert('Error',error)
+        }
+
+    }
+    
+    function handleUserNameChange(event){
+        setUserName(event.target.value)
+        //alert(inputDetails.email)
+    }
+
+    function handleEmailChange(event){
+        setEmail(event.target.value)
+        //alert(inputDetails.email)
+    }
+
+    function handlePasswordChange(event){
+        setPassword(event.target.value)
+        //alert(inputDetails.email)
+    }
+
+/*     setInputDetails({
+        [event.target.name]: event.target.value
+    }) */
+
 
     const firstDiv ={
         backgroundColor:"#97B3DC",
@@ -96,13 +159,15 @@ function SignUp(){
                 <h4 style={signUpHeader}>Sign Up</h4>
                 <h6 style={signUpHeader2}>as a Donor</h6>
                 <div className='container' style={inputContainer}>
-                    <input style={inputField} type='text' placeholder='First Name'></input>
-                    <input style={inputField} type='text' placeholder='Last Name'></input>
-                    <input style={inputField} type='text' placeholder='Email'></input>
-                    <input style={inputField} type='password' placeholder='Password'></input>
+                    <form onSubmit={handleSubmit}>
+                        <input name='userName' style={inputField} type='text' placeholder='Username' onChange={handleUserNameChange}></input>
+                        <input name='email' style={inputField} type='email' placeholder='Email' onChange={handleEmailChange}></input>
+                        <input name='password' style={inputField} type='password' placeholder='Password'onChange={handlePasswordChange}></input>
+                    </form>
+
                 </div>
                 <div className='container' style={{display:"flex", paddingTop:"30px", marginLeft:"5%"}}>
-                    <button style={signUpButtonStyle}>Sign Up</button>
+                    <button type='submit' style={signUpButtonStyle} onClick={handleSubmit}>Sign Up</button>
                     <button style={signUpButtonStyle} onClick={()=>navigate('/registercharity')}>Register Charity</button>
                 </div>
                 
