@@ -1,10 +1,5 @@
 #! /usr/bin/env python3.6
 
-"""
-server.py
-Stripe Sample.
-Python 3.6 or newer required.
-"""
 import os
 from flask import Flask, redirect, jsonify, json, request, current_app
 
