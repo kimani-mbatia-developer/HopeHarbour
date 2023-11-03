@@ -90,3 +90,7 @@ class GetContribution(Resource):
         # charity
         calc = [{"amount": contribution.amount} for contribution in contributions]
         return jsonify(calc)
+
+
+
+
