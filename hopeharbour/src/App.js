@@ -9,9 +9,13 @@ import Login from './login';
 import Footer from './footer';
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom'; 
 import { useState,useEffect } from 'react';
+import paypal from './components/paypal';
 
 
 function App() {
+
+  const[checkout,set checkout]=useState{false}
+
   let [isLoggedIn, setIsLoggedIn] = useState(false)
   let [donorCredentials, setDonorCredentials] = useState([])
 
@@ -22,7 +26,21 @@ function App() {
   }) */
 
   return (
-    <div>
+    <div className="App">
+      {checkout ?(
+        <paypal/>
+      ):
+      }
+
+      <button 
+      onClick={()=> {
+        setcheckOut(true);
+        }}
+        >
+          checkout
+          </button>
+
+      
 
       <Navbar isLoggedIn={isLoggedIn} />
       <Routes>
