@@ -23,11 +23,11 @@ class PaymentMethod(db.Model):
         expiration_date,
         security_code,
         is_default,
-        donor,
+        donor_id,
     ):
         self.payment_type = payment_type
         self.card_number = card_number
         self.expiration_date = expiration_date
         self.security_code = security_code
         self.is_default = is_default
-        self.donor = donor
+        self.donor = donor_id
