@@ -1,5 +1,10 @@
 from flask import Blueprint, make_response, request, jsonify
-from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_jwt_extended import (
+    create_access_token,
+    jwt_required,
+    set_access_cookies,
+    unset_jwt_cookies,
+)
 from backend.models.user import User
 from backend.models.common import create_response_with_jwt_token, db, bcrypt
 from flask_restx import Resource, Namespace, fields
@@ -27,6 +32,16 @@ def authenticate(username, password):
 def identity(payload):
     user_id = payload["identity"]
     return User.query.get(user_id)
+
+
+def create_response_with_jwt_token(identity):
+    # Generate the JWT token
+    access_token = create_access_token(identity=identity)
+
+    # Create a response with the token included
+    response_data = {"message": "Login successful", "access_token": access_token}
+
+    return response_data
 
 
 # Route to register a new user
@@ -87,8 +102,8 @@ class LoginUser(Resource):
         user = User.query.filter_by(email=email).first()
 
         if user and bcrypt.check_password_hash(user.password, password):
-            response, token = create_response_with_jwt_token(identity=user.id)
-            return response, 200, token
+            response = create_response_with_jwt_token(identity=user.id)
+            return response
         else:
             return {"message": "Login failed", "data": None}, 401
 

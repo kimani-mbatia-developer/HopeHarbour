@@ -33,6 +33,17 @@ stories_response_model = donors_ns.model(
 )
 
 
+# donations response model
+donation_model = donors_ns.model(
+    "DonationModel",
+    {
+        "id": fields.Integer(description="Donation ID"),
+        "amount": fields.Float(description="Donation Amount"),
+        "charity_name": fields.String(description="Charity Name"),
+    },
+)
+
+
 # Route to choose a charity
 @donors_ns.route("/choose-charity/<int:charity_id>")
 class ChooseCharityResource(Resource):
@@ -81,12 +92,29 @@ class StoryListByCharity(Resource):
 
 
 # Get donations a donor has made
-@donors_ns.route("/contributions/donor_id")
+@donors_ns.route("/contributions/<int:donor_id>")
 class GetContribution(Resource):
-    donors_ns.doc("Get donor's contributions")
-
+    @donors_ns.doc("Get a donor's contributions")
+    @donors_ns.marshal_list_with(donation_model)
     def get(self, donor_id):
-        contributions = Donation.query.filter_by(donor_id=donor_id).all()
-        # charity
-        calc = [{"amount": contribution.amount} for contribution in contributions]
-        return jsonify(calc)
+        # Query donations made by the donor with the specified donor_id
+        donations = (
+            db.session.query(
+                Donation.id, Donation.amount, Charity.name.label("charity_name")
+            )
+            .join(Charity, Donation.charity_id == Charity.id)
+            .filter(Donation.donor_id == donor_id)
+            .all()
+        )
+
+        # Format the donations as a list of dictionaries
+        donation_data = [
+            {
+                "id": donation.id,
+                "amount": donation.amount,
+                "charity_name": donation.charity_name,
+            }
+            for donation in donations
+        ]
+
+        return donation_data, 200
