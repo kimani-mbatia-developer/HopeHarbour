@@ -87,7 +87,6 @@ class GetBeneficiaries(Resource):
         }
 
 
-
 # Route to create a beneficiary for a charity
 @beneficiaries_ns.route("/create", methods=["POST"])
 class CreateBeneficiary(Resource):
