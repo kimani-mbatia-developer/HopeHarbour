@@ -3,3 +3,5 @@
 
 instance/
 migrations/
+__pycache__/
+*.pyc
