@@ -1,21 +1,10 @@
-from backend.models.common import db
-from backend.models.donor import Donor
-from flask import Blueprint, jsonify, request
-
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
-email = Blueprint('email', __name__)
-
-from backend.models.common import db
-from backend.models.donor import Donor
-from flask import Blueprint, jsonify, request
-
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from flask import Blueprint, jsonify
 from datetime import datetime, timedelta
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from backend.models.common import db
+from backend.models.donor import Donor
 
 email = Blueprint('email', __name__)
 
@@ -44,11 +33,7 @@ def send_donation_reminder():
                 
                 # Check if it's time to send a reminder
                 if next_reminder_date.date() <= datetime.now().date():
-                    send_email(subject, body, donor.email)
-                    
-                    # Update the next_donation_date
-                    donor.next_donation
-                    date = next_reminder_date
+                    send_email(subject, body, donor.email, donor, next_reminder_date)
 
         # Commit the changes to the database
         db.session.commit()
@@ -59,10 +44,9 @@ def send_donation_reminder():
 
 def get_all_donor_records():
     donor_records = Donor.query.filter(Donor.email.isnot(None)).all()
-    
     return donor_records
 
-def send_email(subject, body, to_email):
+def send_email(subject, body, to_email, donor, next_reminder_date):
     # Email configuration
     sender_email = "testduans@gmail.com"  # Your sender email
     sender_password = "dovv oswy ttjy egcg"  # Your sender email password
@@ -91,6 +75,10 @@ def send_email(subject, body, to_email):
         server.quit()
 
         print(f"Email sent successfully to {to_email}")
+
+        # Update the next_donation_date
+        donor.next_donation_date = next_reminder_date
+        db.session.commit()
 
     except Exception as e:
         print(f"Email sending failed: {str(e)}")
