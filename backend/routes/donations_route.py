@@ -91,7 +91,7 @@ class GetDonations(Resource):
 
 
 # Route to make a donation to a charity
-@donations_ns.route("/donate", methods=["POST"])
+@donations_ns.route("/onetime_donate", methods=["POST"])
 class CreateDonation(Resource):
     @donations_ns.doc("Make a donation to a charity")
     @donations_ns.expect(donation_model)
@@ -102,8 +102,7 @@ class CreateDonation(Resource):
         data = request.get_json()
         amount = data.get("amount")
         charity_id = data.get("charity_id")
-        frequency = data.get("frequency")
-        payment_methods = data.get("payment_methods")
+        anonymous = data.get("anonymous")
 
         if amount is None or not isinstance(amount, (int, float)) or amount <= 0:
             return {"message": "Invalid donation amount"}, 400
@@ -118,11 +117,19 @@ class CreateDonation(Resource):
             amount=amount,
             donor_id=current_user.id,
             charity_id=charity_id,
-            frequency=frequency,
-            payment_methods=payment_methods,
+            anonymous=anonymous,
         )
 
         db.session.add(donation)
         db.session.commit()
 
         return {"message": "Donation made successfully"}, 201
+
+
+# User donate route (recurring donations)
+class RecurringDonations(Resource):
+    # donor model = frequency
+    # process payment accordingly
+    # Schedule next payment with billing
+    def post(self):
+        pass
