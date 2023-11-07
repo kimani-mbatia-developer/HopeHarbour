@@ -3,5 +3,11 @@
 
 instance/
 migrations/
+<<<<<<< HEAD
 __pycache__/
 *.pyc
+=======
+pycache/
+.pytest_cache/
+__pycache__/
+>>>>>>> backend-development
