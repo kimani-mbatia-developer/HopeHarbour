@@ -4,7 +4,8 @@ import Ellipse2 from '../assets/images/donordashboard/Ellipse 2.png'
 function DonorPageDashboard(){
 
     const dashboardContainer1={
-        position:"relative",
+        //position:"relative",
+        marginTop:"5%",
         backgroundColor:"#569DDF",
         width:"1350px",
         height:"400px",
@@ -19,7 +20,6 @@ function DonorPageDashboard(){
     }
 
     return(
-        <div className="container-fluid" style={{width:"1350px", height:"400px"}}>
             <div className="container" style={dashboardContainer1}>
                 <div className="row">
                     <div className="col" style={dashboardContainer1Text}>
@@ -32,7 +32,6 @@ function DonorPageDashboard(){
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 

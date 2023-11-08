@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
+import Cliploader from "react-spinners/ClipLoader"
 import image4 from './assets/images/signup/image4.png'
 
 function SignUp(){
@@ -9,6 +10,11 @@ function SignUp(){
     const [userName,setUserName]=useState("")
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
+    const [signUpAttempt, setSignUpAttempt]=useState(false)
+    const [signUpMessage, setSignUpMessage]=useState("")
+    const [isLoading, setIsLoading]=useState(false)
+    const [color, setColor] =useState("#ffffff")
+
 
     const [inputDetails, setInputDetails]=useState({
         userName:'',
@@ -25,12 +31,11 @@ function SignUp(){
             password:password,
             role: "donor"
         }
-
+        setIsLoading(true)
         setInputDetails(input)
 
         alert(inputDetails.password)
-        try{
-            const response = fetch('https://hopeharbour-api.onrender.com/auth/register',{
+        fetch('https://hopeharbour-api.onrender.com/auth/register',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -41,13 +46,13 @@ function SignUp(){
                 password: password,
                 role: "donor"
             }),
-        });
-
-        if (response.ok){alert("Donor Account Succesfully created", response.message)}
-
-        }catch(error){
-            alert('Error',error)
-        }
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+            setSignUpMessage(data.message)
+            setSignUpAttempt(true)
+            setIsLoading(false)
+        })
 
     }
     
@@ -152,6 +157,17 @@ function SignUp(){
         marginLeft:"20px"
     }
 
+    const signUpHeader3={
+        position:"relative",
+        paddingTop:"10px",
+        fontSize:"16px",
+        fontFamily:"FaunaOne",
+        fontWeight:"Bold",
+        color:"white"
+    }
+
+
+
     return(
         <div className='container-fluid' style={firstDiv}>
             <img src={image4}></img>
@@ -167,14 +183,39 @@ function SignUp(){
 
                 </div>
                 <div className='container' style={{display:"flex", paddingTop:"30px", marginLeft:"5%"}}>
-                    <button type='submit' style={signUpButtonStyle} onClick={handleSubmit}>Sign Up</button>
+                    {isLoading?(<div className='container' style={signUpButtonStyle}>
+                    <Cliploader
+                                color={color}
+
+                            />
+                    </div>):(
+                         <button type='submit' style={signUpButtonStyle} onClick={handleSubmit}>Sign Up</button>
+                    )}
+                   
                     <button style={signUpButtonStyle} onClick={()=>navigate('/registercharity')}>Register Charity</button>
                 </div>
-                
+
+                {signUpAttempt?(
+                                <div className="container" style={{height:"90%",marginTop:"5%"}}>
+                                    {signUpMessage?(
+                                         <div className="container" style={{height:"10%",borderRadius:"30px",backgroundColor:"green",marginTop:"5%"}}>
+                                            <h6 style={signUpHeader3}>{signUpMessage}</h6>
+                                         </div>
+                                        
+                                        ):(
+                                        <div className="container" style={{height:"10%",borderRadius:"30px",backgroundColor:"red",marginTop:"5%"}}>
+                                            <h6 style={signUpHeader3}>{signUpMessage}</h6>
+                                         </div>
+                                        )}
+
+                                
+                            </div>):(<div></div>)}
+
             </div>
             <div className='container' style={infoSquare}>
                     <p style={infoSquareText}>Join Hopeharbour's network of charities, ranked among the most impactful globally</p>
             </div>
+
             </div>
     )
 }

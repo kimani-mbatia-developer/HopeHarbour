@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import vector6 from './assets/images/login/Vector 6.png'
 import vector13 from './assets/images/login/Vector 13.png'
+import Cliploader from "react-spinners/ClipLoader"
 import { useState } from "react";
 
-function Login(){
+function Login({setLoginStatus}){
 
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [loginAttempt, setLoginAttempt]=useState(false)
     const [loginMessage, setLoginMessage]=useState("")
+    const [isLoading, setIsLoading]=useState(false)
+    const [color, setColor] =useState("#ffffff")
 
 
     function handleEmailInput(event){
@@ -43,7 +46,7 @@ function Login(){
         }
         */
 
-
+        setIsLoading(true)
          fetch('https://hopeharbour-api.onrender.com/auth/login',{
             method:'POST',
             headers:{
@@ -54,13 +57,14 @@ function Login(){
                 password: password,
             }),
         })
-        //.then(res =>res.json())
         .then(res=> res.json())
         .then((data)=>{
-            alert(data.message)
+            //alert(data.message)
             setLoginMessage(data.message)
             //alert(loginStatus)
             setLoginAttempt(true)
+            setIsLoading(false)
+            if(data.message ==="Login successful"){setLoginStatus()}
         })
         //.then(setLoginAttempt(true))
 
@@ -161,7 +165,22 @@ function Login(){
         border:"none",
         borderRadius:"50px",
         fontSize:"12pt",
-        marginLeft:"20px"
+        marginLeft:"20px",
+        textAlign:"center"
+    }
+    
+    const loadingIconStyle={
+        position:"relative",
+        fontFamily:"HeeboMedium",
+        width:"170px",
+        height:"60px",
+        color:"white",
+        backgroundColor:"#97B3DC",
+        border:"none",
+        borderRadius:"50px",
+        fontSize:"12pt",
+        marginLeft:"150px",
+        textAlign:"center"
     }
 
     return(
@@ -179,7 +198,18 @@ function Login(){
                         <input style={inputField} type='password' placeholder='Password' onChange={handlePasswordInput}></input>
                     </div>
                     <div className='container' style={{paddingTop:"30px"}}>
-                        <button style={loginButtonStyle} onClick={handleLogin}>Login</button>
+                        {isLoading==true?(<div style={loadingIconStyle}>
+                            <div className="container" style={{paddingTop:"5%"}}>
+                            <Cliploader
+                                color={color}
+
+                            />
+                            </div>
+
+                        </div>)
+                        :
+                        (<button style={loginButtonStyle} onClick={handleLogin}>Login</button>)}
+                        
                         <h6 style={signUpHeader3}>Don't have an account?</h6>
                         <button style={loginButtonStyle} >Sign Up</button>
                     </div>
