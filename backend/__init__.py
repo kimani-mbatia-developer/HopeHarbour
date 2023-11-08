@@ -7,6 +7,7 @@ from flask import Flask
 from flask_cors import CORS
 from backend.models.common import bcrypt, db, jwt
 from flask_migrate import Migrate
+import stripe
 from backend.routes.auth_route import authenticate, identity
 from flask_restx import Api
 
@@ -36,6 +37,10 @@ api = Api(
     title="HopeHarbour API",
     description="API for HopeHarbour application",
 )
+
+
+# Stripe API key
+stripe.api_key = os.getenv("STRIPE_API_KEY")
 
 
 app_swagger = Flask(__name__)
@@ -80,7 +85,8 @@ from backend.routes.donations_route import donations_bp, donations_ns
 from backend.routes.applications_route import applications_bp, applications_ns
 from backend.routes.beneficiary_route import beneficiaries_bp, beneficiaries_ns
 from backend.routes.email_route import email
-from backend.routes.paid_route import onetimepay
+from backend.routes.paid_route import onetimepay_bp, onetimepay_ns
+
 # from backend.routes.payments_route import payments_bp, payments_ns
 from backend.routes.user_route import users_bp, users_ns
 
@@ -94,7 +100,7 @@ app.register_blueprint(donations_bp)
 app.register_blueprint(applications_bp)
 app.register_blueprint(beneficiaries_bp)
 app.register_blueprint(stories_bp)
-app.register_blueprint(onetimepay)
+app.register_blueprint(onetimepay_bp)
 # app.register_blueprint(payments_bp)
 app.register_blueprint(users_bp)
 
@@ -108,6 +114,7 @@ api.add_namespace(donations_ns)
 api.add_namespace(stories_ns)
 api.add_namespace(applications_ns)
 api.add_namespace(beneficiaries_ns)
+api.add_namespace(onetimepay_ns)
 # api.add_namespace(payments_ns)
 api.add_namespace(users_ns)
 
