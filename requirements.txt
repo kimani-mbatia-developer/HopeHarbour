@@ -44,6 +44,7 @@ redis
 requests
 six
 SQLAlchemy
+stripe
 typing_extensions
 tzdata
 tzlocal
