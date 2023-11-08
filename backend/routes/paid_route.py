@@ -1,9 +1,7 @@
 from flask import Blueprint, request
 from flask_restx import Namespace, Resource, fields
-
 import stripe
 
-stripe.api_key = "sk_test_51O9wNVBwM0XCzFWG6cGF6RRDbiDdAMt3AIGlEaRnILSNfSzjXSxAQqJVD94sRKF7yT704oTEnjtMrqYBQPJdipD600mzOc0VKw"
 
 onetimepay_bp = Blueprint("onetimepay", __name__)
 onetimepay_ns = Namespace("email", description="Onetime payment operations")
