@@ -1,9 +1,8 @@
 import unittest
-import requests
 from backend import app
-# from backend import app
 
 class TestAdminAPI(unittest.TestCase):
+
     def setUp(self):
         self.app = app.test_client()
 
