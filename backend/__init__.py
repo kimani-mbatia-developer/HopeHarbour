@@ -18,7 +18,6 @@ app = Flask(__name__, instance_relative_config=False)
 
 # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-# postgresql://psharbor_user:YXaXF1LCb3RZOuEDjkcASGRvHtGBMmT6@dpg-cl1dlo48s0fs73cd58c0-a.ohio-postgres.render.com/psharbor
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -81,6 +80,7 @@ from backend.routes.donations_route import donations_bp, donations_ns
 from backend.routes.applications_route import applications_bp, applications_ns
 from backend.routes.beneficiary_route import beneficiaries_bp, beneficiaries_ns
 from backend.routes.email_route import email
+from backend.routes.paid_route import onetimepay
 # from backend.routes.payments_route import payments_bp, payments_ns
 from backend.routes.user_route import users_bp, users_ns
 
@@ -94,6 +94,7 @@ app.register_blueprint(donations_bp)
 app.register_blueprint(applications_bp)
 app.register_blueprint(beneficiaries_bp)
 app.register_blueprint(stories_bp)
+app.register_blueprint(onetimepay)
 # app.register_blueprint(payments_bp)
 app.register_blueprint(users_bp)
 
