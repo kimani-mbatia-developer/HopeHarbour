@@ -71,7 +71,7 @@ class GetApplications(Resource):
             page=page, per_page=per_page, error_out=False
         )
         application_data = [
-            {"id": app.id, "charity_name": app.charity_name, "status": app.status}
+            {"id": app.id, "charity_name": app.charity.name, "status": app.status}
             for app in applications.items
         ]
 
