@@ -85,7 +85,7 @@ from backend.routes.donations_route import donations_bp, donations_ns
 from backend.routes.applications_route import applications_bp, applications_ns
 from backend.routes.beneficiary_route import beneficiaries_bp, beneficiaries_ns
 from backend.routes.email_route import email
-from backend.routes.paid_route import onetimepay_bp, onetimepay_ns
+from backend.routes.onetimepay_route import onetimepay_bp, onetimepay_ns
 
 # from backend.routes.payments_route import payments_bp, payments_ns
 from backend.routes.user_route import users_bp, users_ns
