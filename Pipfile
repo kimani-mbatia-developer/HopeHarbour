@@ -17,6 +17,7 @@ flask-restx = "*"
 gunicorn = "*"
 werkzeug = "*"
 psycopg2-binary = "*"
+stripe = "*"
 
 [dev-packages]
 
