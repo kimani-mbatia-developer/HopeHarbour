@@ -80,14 +80,12 @@ class GetDonations(Resource):
             for donation in donations.items
         ]
 
-        return jsonify(
-            {
-                "donations": donation_data,
-                "page": donations.page,
-                "total_pages": donations.pages,
-                "total_items": donations.total,
-            }
-        )
+        return {
+            "donations": donation_data,
+            "page": donations.page,
+            "total_pages": donations.pages,
+            "total_items": donations.total,
+        }
 
 
 # Route to make a donation to a charity
