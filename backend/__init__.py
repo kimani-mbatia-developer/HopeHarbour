@@ -106,29 +106,17 @@ app.register_blueprint(users_bp)
 
 
 # Add the namespaces to the Swagger API
-# api.add_namespace(auth_ns)
-# api.add_namespace(admin_ns)
-# api.add_namespace(charities_ns)
-# api.add_namespace(donors_ns)
-# api.add_namespace(donations_ns)
-# api.add_namespace(stories_ns)
-# api.add_namespace(applications_ns)
-# api.add_namespace(beneficiaries_ns)
-# api.add_namespace(onetimepay_ns)
-# # api.add_namespace(payments_ns)
-# api.add_namespace(users_ns)
-
-api_swagger.add_namespace(auth_ns)
-api_swagger.add_namespace(admin_ns)
-api_swagger.add_namespace(charities_ns)
-api_swagger.add_namespace(donors_ns)
-api_swagger.add_namespace(donations_ns)
-api_swagger.add_namespace(stories_ns)
-api_swagger.add_namespace(applications_ns)
-api_swagger.add_namespace(beneficiaries_ns)
-api_swagger.add_namespace(onetimepay_ns)  # Add onetimepay namespace here
-api_swagger.add_namespace(users_ns)
-
+api.add_namespace(auth_ns)
+api.add_namespace(admin_ns)
+api.add_namespace(charities_ns)
+api.add_namespace(donors_ns)
+api.add_namespace(donations_ns)
+api.add_namespace(stories_ns)
+api.add_namespace(applications_ns)
+api.add_namespace(beneficiaries_ns)
+api.add_namespace(onetimepay_ns)
+# api.add_namespace(payments_ns)
+api.add_namespace(users_ns)
 
 
 @app.route("/")
