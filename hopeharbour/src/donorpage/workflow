@@ -1,0 +1,7 @@
+
+Donation button->
+payment gateway(Stripe, Paypal)->
+Sends a message saying that the tranasction has been completed->
+Donate
+
+

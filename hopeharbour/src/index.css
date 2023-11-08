@@ -1,3 +1,28 @@
+@font-face {
+  font-family: "FaunaOne";
+  src: url("./assets/fonts/FaunaOne-Regular.ttf");
+}
+
+@font-face {
+  font-family: "HeeboLight";
+  src: url("./assets/fonts/Heebo-Light.ttf");
+}
+
+@font-face {
+  font-family: "HeeboRegular";
+  src: url("./assets/fonts/Heebo-Regular.ttf");
+}
+
+@font-face {
+  font-family: "HeeboMedium";
+  src: url("./assets/fonts/Heebo-Medium.ttf");
+}
+
+@font-face {
+  font-family: "HeeboBold";
+  src: url("./assets/fonts/Heebo-Bold.ttf");
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
