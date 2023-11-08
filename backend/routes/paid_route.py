@@ -27,6 +27,7 @@ response_model = onetimepay_ns.model(
 
 @onetimepay_ns.route("/pay")
 class PaymentResource(Resource):
+    @onetimepay_ns.doc(description="Facilitate a onetime payment")
     @onetimepay_ns.expect(payment_model, validate=True)
     @onetimepay_ns.marshal_with(response_model, code=200)
     def post(self):
