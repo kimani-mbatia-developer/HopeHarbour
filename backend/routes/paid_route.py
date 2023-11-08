@@ -1,31 +1,23 @@
-from flask import Flask, request
-from flask import Blueprint, jsonify
-from flask_restx import Api, Resource, fields
+from flask import Blueprint, request
+from flask_restx import Namespace, Resource, fields
 
 import stripe
 
 stripe.api_key = "sk_test_51O9wNVBwM0XCzFWG6cGF6RRDbiDdAMt3AIGlEaRnILSNfSzjXSxAQqJVD94sRKF7yT704oTEnjtMrqYBQPJdipD600mzOc0VKw"
 
-app = Flask(__name__)
+onetimepay_bp = Blueprint("onetimepay", __name__)
+onetimepay_ns = Namespace("email", description="Onetime payment operations")
 
-onetimepay = Blueprint("email", __name__)
-
-api = Api(
-    onetimepay,
-    doc="/doc",
-    title="Stripe Payment API",
-    description="API for making one-time payments with Stripe",
-)
 
 # Request and response models
-payment_model = api.model(
+payment_model = onetimepay_ns.model(
     "Payment",
     {
         "email": fields.String(description="Email of the recipient", required=True),
     },
 )
 
-response_model = api.model(
+response_model = onetimepay_ns.model(
     "PaymentResponse",
     {
         "client_secret": fields.String(
@@ -35,15 +27,15 @@ response_model = api.model(
 )
 
 
-@onetimepay.route("/pay", methods=["POST"])
+@onetimepay_ns.route("/pay")
 class PaymentResource(Resource):
-    @api.expect(payment_model, validate=True)
-    @api.marshal_with(response_model, code=200)
+    @onetimepay_ns.expect(payment_model, validate=True)
+    @onetimepay_ns.marshal_with(response_model, code=200)
     def post(self):
         """
         Make a one-time payment with Stripe
         """
-        email = request.json.get("email", None)
+        email = onetimepay_ns.payload.get("email", None)
 
         if not email:
             return "You need to send an Email!", 400
@@ -53,9 +45,3 @@ class PaymentResource(Resource):
         )
 
         return {"client_secret": intent["client_secret"]}, 200
-
-
-app.register_blueprint(onetimepay)
-
-if __name__ == "__main__":
-    app.run(debug=True)
