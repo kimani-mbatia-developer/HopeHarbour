@@ -4,7 +4,7 @@ import stripe
 
 
 onetimepay_bp = Blueprint("onetimepay", __name__)
-onetimepay_ns = Namespace("email", description="Onetime payment operations")
+onetimepay_ns = Namespace("onetimepay", description="Onetime payment operations")
 
 
 # Request and response models
