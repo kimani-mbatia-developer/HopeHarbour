@@ -27,32 +27,31 @@ response_model = onetimepay_ns.model(
     },
 )
 
+class PaymentResource(Resource):
+    @onetimepay_ns.expect(payment_model, validate=True)
+    @onetimepay_ns.marshal_with(response_model, code=200)
+    def post(self):
+        """
+        Make a one-time payment with Stripe
+        """
+        try:
+            email = onetimepay_ns.payload.get("email", None)
 
-@onetimepay_ns.route("/pay")
-@onetimepay_ns.doc(description="Facilitate a onetime payment")
-@onetimepay_ns.expect(payment_model, validate=True)
-@onetimepay_ns.marshal_with(response_model, code=200)
-def post(self):
-    """
-    Make a one-time payment with Stripe
-    """
-    try:
-        email = onetimepay_ns.payload.get("email", None)
+            if not email:
+                raise ValueError("Missing email parameter")
 
-        if not email:
-            raise ValueError("Missing email parameter")
+            logging.info(f"Creating payment intent for email: {email}")
 
-        logging.info(f"Creating payment intent for email: {email}")
+            intent = stripe.PaymentIntent.create(
+                amount=5000, currency="usd", receipt_email=email
+            )
 
-        intent = stripe.PaymentIntent.create(
-            amount=5000, currency="usd", receipt_email=email
-        )
+            return {"client_secret": intent["client_secret"]}, 200
+        except Exception as e:
+            logging.error(f"Payment error: {str(e)}")
+            return str(e), 400
 
-        return {"client_secret": intent["client_secret"]}, 200
-    except Exception as e:
-        logging.error(f"Payment error: {str(e)}")
-        return str(e), 400
-
+onetimepay_ns.add_resource(PaymentResource, '/pay')
 
 @onetimepay_bp.route("/stripe-webhook", methods=["POST"])
 def stripe_webhook():
