@@ -18,7 +18,11 @@ import {loadStripe} from '@stripe/stripe-js';
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom'; 
 import { useState,useEffect } from 'react';
 
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+//const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+
+const stripePromise = loadStripe('pk_test_51O9wNVBwM0XCzFWGs1UJCn7IqgvQM8pEx0dJSQ0tszXRi8v4YlekI3vvQVP7iEghQ2msfEbXDn9r3xx6NNdym0yG00HHan0JyP')
+
+
 
 function App() {
   let [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -40,7 +44,7 @@ function App() {
             //console.log(data.client_secret)
             setClientSecret(data.client_secret)
             console.log(clientSecret)
-            alert(clientSecret)
+            //alert(clientSecret)
           } )
           .catch(error=>{alert(error)})
       }, []);

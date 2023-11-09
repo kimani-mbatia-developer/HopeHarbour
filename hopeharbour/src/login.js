@@ -3,6 +3,8 @@ import vector6 from './assets/images/login/Vector 6.png'
 import vector13 from './assets/images/login/Vector 13.png'
 import Cliploader from "react-spinners/ClipLoader"
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 function Login({setLoginStatus}){
 
@@ -12,6 +14,8 @@ function Login({setLoginStatus}){
     const [loginMessage, setLoginMessage]=useState("")
     const [isLoading, setIsLoading]=useState(false)
     const [color, setColor] =useState("#ffffff")
+
+    const navigate = useNavigate()
 
 
     function handleEmailInput(event){
@@ -64,7 +68,10 @@ function Login({setLoginStatus}){
             //alert(loginStatus)
             setLoginAttempt(true)
             setIsLoading(false)
-            if(data.message ==="Login successful"){setLoginStatus()}
+            if(data.message ==="Login successful"){
+                setLoginStatus()
+                navigate("/");
+            }
         })
         //.then(setLoginAttempt(true))
 
@@ -234,7 +241,6 @@ function Login({setLoginStatus}){
                     
                 </div>
             </div>
-
         </div>
     )
 }

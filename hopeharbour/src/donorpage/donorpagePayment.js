@@ -153,7 +153,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
     }
 
     const submitButtonStyle={
-        marginTop:"10%",
+        marginTop:"3%",
         border:"none",
         width:"30%",
         height:'50px',
