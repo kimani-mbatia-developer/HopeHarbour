@@ -38,6 +38,7 @@ function App() {
             //console.log(typeof data.client_secret)
             //console.log(data.client_secret)
             setClientSecret(data.client_secret)
+            console.log(clientSecret)
             alert(clientSecret)
           } )
           .catch(error=>{alert(error)})
