@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import Blueprint, make_response, request, jsonify
 from flask_jwt_extended import (
     create_access_token,
@@ -6,7 +7,7 @@ from flask_jwt_extended import (
     unset_jwt_cookies,
 )
 from backend.models.user import User
-from backend.models.common import create_response_with_jwt_token, db, bcrypt
+from backend.models.common import jwt, db, bcrypt
 from flask_restx import Resource, Namespace, fields
 
 
@@ -101,10 +102,9 @@ class LoginUser(Resource):
         password = data.get("password")
 
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-        role = data.get("role")
 
         # Creating a new user
-        user = User(username=username, email=email, password=hashed_password, role=role)
+        user = User(username=username, email=email, password=hashed_password)
 
         db.session.add(user)
         db.session.commit()
