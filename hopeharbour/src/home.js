@@ -1,5 +1,7 @@
 import React from 'react';
 
+import OurCharities from './ourcharities';
+
 import shape1 from './assets/images/home/Vector 1.png'
 import image2 from './assets/images/home/image2.png'
 import vector3 from './assets/images/home/Vector 3.png'
@@ -15,7 +17,7 @@ const homeStyle={
 const firstDiv={
     display:"flex",
     position:"relative",
-    overflow:"hidden"
+    overflow:"hidden",
 }
 
 const header1Container={
@@ -66,7 +68,7 @@ const FactBox={
     width:"750px",
     height:"400px",
     backgroundColor:"#569DDF",
-    borderRadius:"50px"
+    borderRadius:"50px",
 }
 
 const altButtonStyle={
@@ -81,12 +83,7 @@ const altButtonStyle={
     color:"white"
 }
 
-const header2={
-    fontSize:"40px",
-    fontFamily:"FaunaOne",
-    fontWeight:"Bold",
-    color:"white"
-}
+
 
 const header3Container={
     position:"absolute",
@@ -95,6 +92,7 @@ const header3Container={
     width:"600px",
     zIndex:"9"
 }
+
 
 const quickFacts = [
     {
@@ -151,9 +149,8 @@ function Home(){
                
             </div>
 
-            <div className='container' style={{position:"relative", left:"30%", paddingTop:"50px"}}>
-                <h2 style={header2}>Our Charities</h2>    
-            </div>
+            <OurCharities />   
+
 
             <div className='container-fluid' style={firstDiv}>
                 <img src={vector4} style={{width:"70%",position:"relative",left:"-3%"}}></img>

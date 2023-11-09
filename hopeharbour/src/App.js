@@ -10,6 +10,7 @@ import DonorPageDonate from './donorpage/donorpagedonate';
 import DonorPagePayment from './donorpage/donorpagePayment';
 import Login from './login';
 import Footer from './footer';
+
 //Stripe Elements
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
