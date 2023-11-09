@@ -40,8 +40,7 @@ api = Api(
 
 
 # Stripe API key
-# stripe.api_key = os.getenv("STRIPE_API_KEY")
-stripe.api_key = "sk_test_51O9wNVBwM0XCzFWG6cGF6RRDbiDdAMt3AIGlEaRnILSNfSzjXSxAQqJVD94sRKF7yT704oTEnjtMrqYBQPJdipD600mzOc0VKw"
+stripe.api_key = os.getenv("STRIPE_API_KEY")
 
 
 app_swagger = Flask(__name__)
