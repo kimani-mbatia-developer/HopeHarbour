@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import Blueprint, make_response, request, jsonify
 from flask_jwt_extended import (
     create_access_token,
@@ -6,7 +7,7 @@ from flask_jwt_extended import (
     unset_jwt_cookies,
 )
 from backend.models.user import User
-from backend.models.common import create_response_with_jwt_token, db, bcrypt
+from backend.models.common import jwt, db, bcrypt
 from flask_restx import Resource, Namespace, fields
 
 
@@ -79,8 +80,7 @@ class RegisterUser(Resource):
         return {"message": "User registered successfully", "data": None}, 201
 
 
-# Route to log in a user
-@auth_ns.route("/login")
+# Route to log in a user@auth_ns.route("/login")
 class LoginUser(Resource):
     @auth_ns.doc("Login a user")
     @auth_ns.expect(
@@ -94,18 +94,63 @@ class LoginUser(Resource):
     )
     @auth_ns.marshal_with(auth_response_model, code=200, description="Login successful")
     @auth_ns.marshal_with(auth_response_model, code=401, description="Login failed")
+    # @auth_ns.marshal_with(auth_response_model, code=201, description="User registered successfully")
     def post(self):
         data = request.get_json()
         email = data.get("email")
         password = data.get("password")
 
-        user = User.query.filter_by(email=email).first()
+        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
-        if user and bcrypt.check_password_hash(user.password, password):
-            response = create_response_with_jwt_token(identity=user.id)
-            return response
-        else:
-            return {"message": "Login failed", "data": None}, 401
+        # Creating a new user
+        user = User(email=email, password=hashed_password)
+
+        db.session.add(user)
+        db.session.commit()
+
+        # Now, generate a JWT token for the registered user
+        secret_key = "your_actual_secret_key"
+
+        # Set the expiration time to 1 hour from now
+        expiration_time = datetime.utcnow() + timedelta(hours=1)
+
+        # Generate the JWT token with the 'exp' claim
+        token = jwt.encode(
+            {"user_id": user.id, "exp": expiration_time}, secret_key, algorithm="HS256"
+        )
+
+        return {
+            "message": "User registered successfully",
+            "data": {"token": token},
+        }, 201
+
+
+# @auth_ns.route("/login")
+# class LoginUser(Resource):
+#     @auth_ns.doc("Login a user")
+#     @auth_ns.expect(
+#         auth_ns.model(
+#             "LoginModel",
+#             {
+#                 "email": fields.String(required=True, description="Email"),
+#                 "password": fields.String(required=True, description="Password"),
+#             },
+#         )
+#     )
+#     @auth_ns.marshal_with(auth_response_model, code=200, description="Login successful")
+#     @auth_ns.marshal_with(auth_response_model, code=401, description="Login failed")
+#     def post(self):
+#         data = request.get_json()
+#         email = data.get("email")
+#         password = data.get("password")
+
+#         user = User.query.filter_by(email=email).first()
+
+#         if user and bcrypt.check_password_hash(user.password, password):
+#             response = create_response_with_jwt_token(identity=user.id)
+#             return response
+#         else:
+#             return {"message": "Login failed", "data": None}, 401
 
 
 @auth_ns.route("/logout")

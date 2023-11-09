@@ -43,7 +43,7 @@ class PaymentResource(Resource):
             logging.info(f"Creating payment intent for email: {email}")
 
             intent = stripe.PaymentIntent.create(
-                amount=5000, currency="usd", receipt_email=email
+                amount=5000, currency="usd", receipt_email=email, payment_method_types=["card"],
             )
 
             return {"client_secret": intent["client_secret"]}, 200
