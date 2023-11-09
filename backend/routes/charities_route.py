@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import get_jwt_identity, jwt_required, current_user
 from flask_restx import Namespace, Resource, fields, reqparse
 from sqlalchemy import func
 from backend.models import charity
@@ -9,6 +9,7 @@ from backend.models.charity import Charity
 from backend.models.common import db
 from backend.models.donation import Donation
 from backend.models.story import Story
+from backend.models.user import User
 
 charities_bp = Blueprint("charities", __name__, url_prefix="/charities")
 charities_ns = Namespace("charities", description="Charity operations")
@@ -274,20 +275,27 @@ class AnonymousDonationsAmountResource(Resource):
     @charities_ns.response(200, "Success")  # Document the "Success" response
     @jwt_required()
     def get(self):
-        # Query and sum amounts donated by anonymous donors
-        total_amount = (
-            db.session.query(func.sum(Donation.amount))
-            .filter(
-                Donation.anonymous.is_(True),
-                Donation.charity_id == current_user.charity.id,
-            )
-            .scalar()
-        )
+        current_user_id = get_jwt_identity()
+        current_user = User.query.get(current_user_id)
 
-        if total_amount is not None:
-            return {"total_anonymous_donations": total_amount}, 200
+        # Check if the user has the "charity" role
+        if current_user and "charity" in current_user.roles:
+            # Query and sum amounts donated by anonymous donors
+            total_amount = (
+                db.session.query(func.sum(Donation.amount))
+                .filter(
+                    Donation.anonymous.is_(True),
+                    Donation.charity_id == current_user.charity.id,
+                )
+                .scalar()
+            )
+
+            if total_amount is not None:
+                return {"total_anonymous_donations": total_amount}, 200
+            else:
+                return {"total_anonymous_donations": 0}, 200
         else:
-            return {"total_anonymous_donations": 0}, 200
+            return {"message": "Access forbidden for this user"}, 403
 
 
 # Route to create a beneficiary for a charity
