@@ -48,7 +48,7 @@ function DonorPageNavBar(){
         color:"white",
         height:'5%',
         width:"100%",
-        marginTop:"10%"
+        marginTop:"1%"
     }
 
     function logout(){

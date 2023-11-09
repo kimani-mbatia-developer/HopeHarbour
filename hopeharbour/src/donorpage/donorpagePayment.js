@@ -1,48 +1,92 @@
 import React from "react";
-import { useState } from "react";
-import { CardElement } from "@stripe/react-stripe-js";
+import { useState, useEffect } from "react";
+import { PaymentElement,useStripe,useElements, CardElement } from "@stripe/react-stripe-js"; 
 
 //Stripe imports
-import {Elements} from '@stripe/react-stripe-js';
+
 import {loadStripe} from '@stripe/stripe-js';
 
 import mastercard from "../assets/images/pay/Rectangle 143.png"
 import visa from "../assets/images/pay/Rectangle 144.png"
 
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
-function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
 
-    const options = {
-        // passing the client secret obtained from the server
-        clientSecret: '{{CLIENT_SECRET}}',
-        fetch
-      };
-    
+function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){  
 
     const [donationMessage, setDonationMessage]=useState("")
+    const [emailAddress, setEmailAddress]=useState("")
 
-    const CARD_ELEMENT_OPTIONS = {
-        theme: 'stripe',
+    const stripe = useStripe()
+    const elements = useElements()
 
-        style: {
-          base: {
-            'color': '#32325d',
-            'fontFamily': '"Helvetica Neue", Helvetica, sans-serif',
-            'fontSmoothing': 'antialiased',
-            'fontSize': '20px',
-            
-            
-            '::placeholder': {
-              color: '#aab7c4',
-            },
-          },
-          invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a',
-          },
-        },
-      };
+    const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!stripe) {
+      return;
+    }
+
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+
+    if (!clientSecret) {
+      return;
+    }
+
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent.status) {
+        case "succeeded":
+          setMessage("Payment succeeded!");
+          break;
+        case "processing":
+          setMessage("Your payment is processing.");
+          break;
+        case "requires_payment_method":
+          setMessage("Your payment was not successful, please try again.");
+          break;
+        default:
+          setMessage("Something went wrong.");
+          break;
+      }
+    });
+  }, [stripe]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js hasn't yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        // Make sure to change this to your payment completion page
+        return_url: "http://localhost:3000",
+      },
+    });
+
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Otherwise, your customer will be redirected to
+    // your `return_url`. For some payment methods like iDEAL, your customer will
+    // be redirected to an intermediate site first to authorize the payment, then
+    // redirected to the `return_url`.
+    if (error.type === "card_error" || error.type === "validation_error") {
+      setMessage(error.message);
+    } else {
+      setMessage("An unexpected error occurred.");
+    }
+
+    setIsLoading(false);
+  };
+
+
 
     const mainContainer={
         backgroundColor:"#E9E9E9",
@@ -83,7 +127,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         marginTop:"5%",
         backgroundColor:"#FFFFFF",
         width:"50%",
-        height:"40%",
+        height:"50%",
         borderRadius:"30px"
     }
 
@@ -92,7 +136,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         backgroundColor:"#D9D9D9",
         borderRadius:"30px",
         width:"80%",
-        height:"80px",
+        height:"50px",
         marginTop:"10px",
         textAlign:"center"
     }
@@ -103,7 +147,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         backgroundColor:"#D9D9D9",
         borderRadius:"30px",
         width:"30%",
-        height:"80px",
+        height:"50px",
         marginTop:"10px",
         textAlign:"center"
     }
@@ -117,6 +161,10 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         borderRadius:"30px"
 
     }
+
+    const paymentElementOptions = {
+        layout: "tabs"
+      }
 
     function makeDonation(){
         fetch('https://hopeharbour-api.onreder.com/donations/donate',{
@@ -137,7 +185,12 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         })
     }
 
+    function processEmailAddress(event){
+        setEmailAddress(event.target.value)
+    }
+
     return(
+        
         <div className="container" style={mainContainer}>
             <div className="container" style={charityDisplay}>
                 <div className="row" style={{width:"99%", paddingTop:"5%"}}>
@@ -179,30 +232,22 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
                     </div>
                 </div>
                 <div className="container" style={{display:"block",textAlign:"center",marginTop:"10%"}}>
-                    <Elements stripe={stripePromise} /* options={options} */>
-                        <CardElement id="card-element"  options={CARD_ELEMENT_OPTIONS} />
-                    </Elements>
+                    {/* <input type="email" placeholder="email" onChange={processEmailAddress}></input> */}
+
+                    {/* <div className="container" style={{display:"block",textAlign:"center"}}>
+                        <input style={inputStyle} placeholder="Card Number"></input>
+                        <input style={inputStyle} placeholder="Name of Card"></input>
+                        <input type="month" style={inputStyle2} placeholder="Expiry Date"></input>
+                        <input type="number" style={inputStyle2} placeholder="Expiry Date"></input>
+                    </div>  */}
+                   
+                        <PaymentElement id="payment-element" options={paymentElementOptions} />
+                     
                     <button style={submitButtonStyle}>Pay</button>
 
                 </div>
-               
-
-
-{/*                 <div className="container" style={{display:"block",textAlign:"center"}}>
-                    <input style={inputStyle} placeholder="Card Number"></input>
-                    <input style={inputStyle} placeholder="Name of Card"></input>
-                    <input type="month" style={inputStyle2} placeholder="Expiry Date"></input>
-                    <input type="number" style={inputStyle2} placeholder="Expiry Date"></input>
-                </div> */}
-
-
                 
             </div>
-            
-
-            
-
-           
         </div>
     )
 }
