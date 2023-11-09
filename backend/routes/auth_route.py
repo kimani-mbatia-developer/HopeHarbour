@@ -97,14 +97,13 @@ class LoginUser(Resource):
     # @auth_ns.marshal_with(auth_response_model, code=201, description="User registered successfully")
     def post(self):
         data = request.get_json()
-        username = data.get("username")
         email = data.get("email")
         password = data.get("password")
 
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
         # Creating a new user
-        user = User(username=username, email=email, password=hashed_password)
+        user = User(email=email, password=hashed_password)
 
         db.session.add(user)
         db.session.commit()
