@@ -115,7 +115,7 @@ class TotalDonationsResource(Resource):
         if charity is None:
             return {"message": "Charity not found"}, 404
 
-        total_donation_amount = charity.calculate_total_donation
+        total_donation_amount = charity.calculate_total_donation()
         return {"total_donation_amount": total_donation_amount}, 200
 
 
