@@ -1,48 +1,24 @@
 import React from "react";
-import { useState } from "react";
-import { CardElement } from "@stripe/react-stripe-js";
+import { useState, useEffect } from "react";
+import { PaymentElement,useStripe,useElements, CardElement } from "@stripe/react-stripe-js"; 
 
 //Stripe imports
-import {Elements} from '@stripe/react-stripe-js';
+
 import {loadStripe} from '@stripe/stripe-js';
 
 import mastercard from "../assets/images/pay/Rectangle 143.png"
 import visa from "../assets/images/pay/Rectangle 144.png"
 
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
-function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
 
-    const options = {
-        // passing the client secret obtained from the server
-        clientSecret: '{{CLIENT_SECRET}}',
-        fetch
-      };
-    
+function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){  
 
     const [donationMessage, setDonationMessage]=useState("")
+    const [emailAddress, setEmailAddress]=useState("")
 
-    const CARD_ELEMENT_OPTIONS = {
-        theme: 'stripe',
+    const stripe = useStripe()
+    const elements = useElements()
 
-        style: {
-          base: {
-            'color': '#32325d',
-            'fontFamily': '"Helvetica Neue", Helvetica, sans-serif',
-            'fontSmoothing': 'antialiased',
-            'fontSize': '20px',
-            
-            
-            '::placeholder': {
-              color: '#aab7c4',
-            },
-          },
-          invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a',
-          },
-        },
-      };
 
     const mainContainer={
         backgroundColor:"#E9E9E9",
@@ -83,7 +59,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         marginTop:"5%",
         backgroundColor:"#FFFFFF",
         width:"50%",
-        height:"40%",
+        height:"50%",
         borderRadius:"30px"
     }
 
@@ -92,7 +68,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         backgroundColor:"#D9D9D9",
         borderRadius:"30px",
         width:"80%",
-        height:"80px",
+        height:"50px",
         marginTop:"10px",
         textAlign:"center"
     }
@@ -103,7 +79,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         backgroundColor:"#D9D9D9",
         borderRadius:"30px",
         width:"30%",
-        height:"80px",
+        height:"50px",
         marginTop:"10px",
         textAlign:"center"
     }
@@ -117,6 +93,10 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         borderRadius:"30px"
 
     }
+
+    const paymentElementOptions = {
+        layout: "tabs"
+      }
 
     function makeDonation(){
         fetch('https://hopeharbour-api.onreder.com/donations/donate',{
@@ -137,7 +117,12 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
         })
     }
 
+    function processEmailAddress(event){
+        setEmailAddress(event.target.value)
+    }
+
     return(
+        
         <div className="container" style={mainContainer}>
             <div className="container" style={charityDisplay}>
                 <div className="row" style={{width:"99%", paddingTop:"5%"}}>
@@ -179,30 +164,22 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
                     </div>
                 </div>
                 <div className="container" style={{display:"block",textAlign:"center",marginTop:"10%"}}>
-                    <Elements stripe={stripePromise} /* options={options} */>
-                        <CardElement id="card-element"  options={CARD_ELEMENT_OPTIONS} />
-                    </Elements>
+                    {/* <input type="email" placeholder="email" onChange={processEmailAddress}></input> */}
+
+                    {/* <div className="container" style={{display:"block",textAlign:"center"}}>
+                        <input style={inputStyle} placeholder="Card Number"></input>
+                        <input style={inputStyle} placeholder="Name of Card"></input>
+                        <input type="month" style={inputStyle2} placeholder="Expiry Date"></input>
+                        <input type="number" style={inputStyle2} placeholder="Expiry Date"></input>
+                    </div>  */}
+                   
+                        <PaymentElement id="payment-element" options={paymentElementOptions} />
+                     
                     <button style={submitButtonStyle}>Pay</button>
 
                 </div>
-               
-
-
-{/*                 <div className="container" style={{display:"block",textAlign:"center"}}>
-                    <input style={inputStyle} placeholder="Card Number"></input>
-                    <input style={inputStyle} placeholder="Name of Card"></input>
-                    <input type="month" style={inputStyle2} placeholder="Expiry Date"></input>
-                    <input type="number" style={inputStyle2} placeholder="Expiry Date"></input>
-                </div> */}
-
-
                 
             </div>
-            
-
-            
-
-           
         </div>
     )
 }

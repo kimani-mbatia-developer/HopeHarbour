@@ -14,17 +14,22 @@ function DonorPageDonate(){
 
     useEffect(()=>{
         fetch('https://hopeharbour-api.onrender.com/charities/')
-        .then(response=>response.json())
+        .then((response)=>response.json())
         .then(data=>{
             setCharityList(data)
         })
     },[])
 
     function navigatetoPay(event){
+        if (amount == ""){
+            alert("Please Put in a valid amount")
+        }
+        else{
+            setCharityId(event.target.id)
+            setCharityName(event.target.name)
+            togglePaymentSection(true)
+        }
         //alert(event.target.id)
-        setCharityId(event.target.id)
-        setCharityName(event.target.name)
-        togglePaymentSection(true)
     }
 
     function setDonationAmountEvent(event){
