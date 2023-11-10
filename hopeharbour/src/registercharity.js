@@ -173,7 +173,7 @@ function RegisterCharity(){
                 setIsLoading(false)
             }
             else{
-                
+                alert("Error")
             }
             
             
