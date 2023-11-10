@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 
-function Login({setLoginStatus}){
+function Login({setLoginStatus,setDonorCredentials}){
 
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
@@ -69,6 +69,15 @@ function Login({setLoginStatus}){
             setLoginAttempt(true)
             setIsLoading(false)
             if(data.message ==="Login successful"){
+                const accessToken = data.data.access_token;
+                localStorage.setItem('access_token', accessToken);
+                
+                if(accessToken){alert("access token found")}
+
+                const userData = data.data.user_data;
+                alert(userData.username);
+                localStorage.setItem('user_data', JSON.stringify(userData));
+                //setDonorCredentials(userData)
                 setLoginStatus()
                 navigate("/");
             }

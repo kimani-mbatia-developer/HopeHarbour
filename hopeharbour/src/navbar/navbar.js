@@ -3,7 +3,7 @@ import logo from '../assets/images/Hopeharbour.png'
 import userImageCont from '../assets/images/navbar/Ellipse 9.png'
 import {useNavigate} from 'react-router-dom';
 
-function Navbar({isLoggedIn}){
+function Navbar({isLoggedIn, donorCredentials}){
 
     const navigate = useNavigate()
 
@@ -41,6 +41,10 @@ function Navbar({isLoggedIn}){
         marginLeft:"20px"
     }
 
+    function showRole(){
+        alert(donorCredentials.role)
+    }
+
 
     return (
         <nav className='navbar' style={navbarStyle}>
@@ -50,10 +54,16 @@ function Navbar({isLoggedIn}){
                     </div>
                 {isLoggedIn?(
                 <div className='container-fluid' style={{position:"relative",left:"75%",top:"-30px"}}>
+                    {/*  <button onClick={showRole}>ShowRole</button>  */}
                     <button style={navButtonStyle} onClick={()=>navigate('/')}>Home</button>
                     <button style={navButtonStyle}>About Us</button>
-                    <button style={signUpButtonStyle} onClick={()=>navigate('/donorMainPage')}>Dashboard</button>
-                    <img src={userImageCont} style={{width:"70px",height:"70px", position:"relative", left:"1%" }}></img>                   
+                    {donorCredentials.role=="donor"?(<button style={signUpButtonStyle} onClick={()=>navigate('/donorMainPage')}>Dashboard</button>)
+                    :
+                    (<button style={signUpButtonStyle} onClick={()=>navigate('/charityMainPage')}>Dashboard</button>)}
+                    
+                    <img src={userImageCont} style={{width:"70px",height:"70px", position:"relative", left:"1%" }}></img>
+                    <p style={{marginLeft:"18%"}}>{donorCredentials.username}</p>
+                                   
                 </div>
         ):(        
                 <div className='container-fluid' style={{position:"relative",left:"75%",top:"-30px"}}>

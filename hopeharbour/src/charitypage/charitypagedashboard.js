@@ -3,7 +3,7 @@ import Ellipse2 from '../assets/images/donordashboard/Ellipse 2.png'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-function DonorPageDashboard({donorCredentials}){
+function CharityPageDashboard(){
 
     const navigate = useNavigate()
 
@@ -71,19 +71,20 @@ function DonorPageDashboard({donorCredentials}){
                 <div className="row">
                     <div className="col" style={dashboardContainer1Text}>
                         <p style={{fontSize:"20px",fontFamily:"HeeboRegular", marginTop:"5%"}}>October 25 2023</p>
-                        <h5 style={{ fontSize:"32px", marginTop:"5%"}}>Welcome back, {donorCredentials.username}</h5>
-                        <p style={{fontFamily:"HeeboRegular", marginTop:"5%"}}>Stay updated on your beneficiaries</p>
+                        <h5 style={{ fontSize:"32px", marginTop:"5%"}}>Welcome back, Charity Name</h5>
+                        <p style={{fontFamily:"HeeboRegular", marginTop:"5%"}}>Stay updated on your donors</p>
                     </div>
                     <div className="col" style={{paddingTop:"1%"}}>
                         <img src={Ellipse2} style={{width:"350px",height:"350px"}}></img>
                     </div>
                 </div>
             </div>
-            <h3 style={dashboardContainer2Heading}>Your beneficiaries</h3>
+            <h3 style={dashboardContainer2Heading}>Recent donations to your Charity</h3>
                 <div className="container" style={dashboardContainer2}>
                 <div className="container" style={charityContainer}>
                     <div className="container" style={{display:"flex"}}>
-                        <p>Charity Name</p>
+                        <p style={{marginRight:"50%"}}>Donor:</p>
+                        <p>Amount:</p>
                     </div>
                 </div>
                 </div>
@@ -92,5 +93,5 @@ function DonorPageDashboard({donorCredentials}){
     )
 }
 
-export default DonorPageDashboard
+export default CharityPageDashboard
 

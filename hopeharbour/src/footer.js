@@ -1,7 +1,11 @@
 import React from "react";
 import logo from './assets/images/Hopeharbour.png'
+import { useNavigate } from "react-router-dom";
 
 function Footer(){
+
+    const navigate = useNavigate()
+
     const footerStyle={
         height:"300px",
         backgroundColor:"#E9E9E9",
@@ -9,6 +13,12 @@ function Footer(){
     }
 
     const footerTextStyle={
+        fontFamily:"HeeboRegular",
+        fontSize: "15px",
+        color: "#C7C7C7",
+
+    }
+    const footerButtonStyle={
         fontFamily:"HeeboRegular",
         fontSize: "15px",
         color: "#C7C7C7",
@@ -37,6 +47,7 @@ function Footer(){
                         <h5 style={{fontFamily:"HeeboBold",}}>Users</h5>
                         <p style={footerTextStyle}>Login</p>
                         <p style={footerTextStyle}>Support</p>
+                        <button style={footerButtonStyle} >Admin</button>
                     </div>
                 </div>
             </div>

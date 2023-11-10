@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { PaymentElement,useStripe,useElements, CardElement } from "@stripe/react-stripe-js"; 
 
 //Stripe imports
@@ -12,6 +13,8 @@ import visa from "../assets/images/pay/Rectangle 144.png"
 
 
 function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){  
+
+  const navigate = useNavigate()
 
     const [donationMessage, setDonationMessage]=useState("")
     const [emailAddress, setEmailAddress]=useState("")
@@ -68,7 +71,8 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        //return_url: "http://localhost:3000",
+        return_url: "http://localhost:3000/success"
       },
     });
 
@@ -243,7 +247,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
                    
                         <PaymentElement id="payment-element" options={paymentElementOptions} />
                      
-                    <button style={submitButtonStyle}>Pay</button>
+                    <button style={submitButtonStyle} onClick={handleSubmit}>Pay</button>
 
                 </div>
                 
