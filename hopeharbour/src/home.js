@@ -15,6 +15,7 @@ const homeStyle={
 }
 
 const firstDiv={
+    backgroundColor:"white",
     display:"flex",
     position:"relative",
     overflow:"hidden",
@@ -159,7 +160,7 @@ function Home(){
                     <p style={header1Text}>Get the latest news on our charities, their works and their progress. Knowledge and accountability are important to us.</p>
                     <button style={header1Button}>Learn More</button>
                 </div>
-                <img src={vector3} style={{width:"70%",position:"relative",right:"21%"}}></img>
+                <img src={vector3} style={{width:"70%",position:"relative",right:"10%"}}></img>
             </div>    
         </section>
     )

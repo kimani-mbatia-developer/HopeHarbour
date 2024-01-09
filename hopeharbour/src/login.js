@@ -91,7 +91,7 @@ function Login({setLoginStatus,setDonorCredentials}){
         position:"relative",
         display:"flex",
         overflow: "hidden",
-        //backgroundColor:"#77C5D6"
+        backgroundColor:"#77C5D6"
     }
 
     const vector6Style={
@@ -100,7 +100,7 @@ function Login({setLoginStatus,setDonorCredentials}){
 
     const vector13Style={
         position:"relative",
-        left:"20%",
+        left:"30%",
         //width:"77%"
     }
 
@@ -109,11 +109,12 @@ function Login({setLoginStatus,setDonorCredentials}){
         backgroundColor:"#569DDF",
         width:"300px",
         height:"300px",
-        left:"33%",
-        top:"50%",
+        left:"23%",
+        top:"45%",
     }
     
     const infoSquareText={
+        textAlign: "justify",
         position:'relative',
         fontFamily:"HeeboLight",
         fontSize:"20px",
@@ -202,9 +203,9 @@ function Login({setLoginStatus,setDonorCredentials}){
     return(
         <div className="container-fluid" style={mainStyle}>
             <img src={vector13} style={vector13Style}></img>
-{/*             <div className='container' style={infoSquare}>
-                    <p style={infoSquareText}>Join Hopeharbour's network of charities, ranked among the most impactful globally</p>
-            </div> */}
+            <div className='container' style={infoSquare}>
+                    <p style={infoSquareText}>Sign in and get updated on the work our charities are doing</p>
+            </div>
             <div className="container" style={{position:"relative", left:"-25%",marginTop:"5%"}}>
                 <div className='container' style={loginForm}>
                     <h4 style={loginHeader}>Login</h4>
