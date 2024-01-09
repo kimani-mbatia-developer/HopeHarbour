@@ -36,7 +36,7 @@ function DonorMainPage({donorCredentials}){
             <DonorPageNavBar />
             <Routes>
                 <Route path="" element={<DonorPageDashboard donorCredentials={donorCredentials} />}></Route>
-                <Route path="details" element={<DonorPageDetails />}></Route>
+                <Route path="details" element={<DonorPageDetails donorCredentials={donorCredentials} />}></Route>
                 <Route path="donate" element={<DonorPageDonate />}>
                     <Route path="payment" element={<DonorPagePayment />}>
                     </Route>

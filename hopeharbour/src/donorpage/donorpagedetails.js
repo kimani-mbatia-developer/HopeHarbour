@@ -1,6 +1,6 @@
 import React from "react";
 
-function DonorPageDetails(){
+function DonorPageDetails({donorCredentials}){
 
     const mainContainer={
         backgroundColor:"#E9E9E9",
@@ -57,7 +57,7 @@ function DonorPageDetails(){
                         </div>
                         <div className="col">
                             <div className="container" style={{backgroundColor:"#97B3DC", width:"350px", height:"40px", borderRadius:"30px"}}>
-                                <p>Carlton Njenga</p>
+                                <p>{donorCredentials.username}</p>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@ function DonorPageDetails(){
                         </div>
                         <div className="col">
                             <div className="container" style={{backgroundColor:"#97B3DC", width:"350px", height:"40px", borderRadius:"30px"}}>
-                                <p>carlton.njenga@student.moringaschool.com</p>
+                                <p>{donorCredentials.email}</p>
                             </div>
                         </div>
                     </div>

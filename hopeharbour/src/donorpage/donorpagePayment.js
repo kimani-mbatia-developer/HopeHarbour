@@ -87,6 +87,8 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
       setMessage("An unexpected error occurred.");
     }
 
+    makeDonation()
+    
     setIsLoading(false);
   };
 
@@ -171,7 +173,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
       }
 
     function makeDonation(){
-        fetch('https://hopeharbour-api.onreder.com/donations/donate',{
+        fetch('https://hopeharbour-api.onreder.com/donations/onetime_donate',{
             method:'POST',
             mode:'no-cors',
             headers:{
@@ -245,7 +247,7 @@ function DonorPagePayment({amount,selectedCharityId,selectedCharityName}){
                         <input type="number" style={inputStyle2} placeholder="Expiry Date"></input>
                     </div>  */}
                    
-                        <PaymentElement id="payment-element" options={paymentElementOptions} />
+                        {/* <PaymentElement id="payment-element" options={paymentElementOptions} /> */}
                      
                     <button style={submitButtonStyle} onClick={handleSubmit}>Pay</button>
 

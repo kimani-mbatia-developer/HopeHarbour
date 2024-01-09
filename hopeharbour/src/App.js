@@ -29,34 +29,34 @@ import { useState,useEffect } from 'react';
 
 //const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
-const stripePromise = loadStripe('pk_test_51O9wNVBwM0XCzFWGs1UJCn7IqgvQM8pEx0dJSQ0tszXRi8v4YlekI3vvQVP7iEghQ2msfEbXDn9r3xx6NNdym0yG00HHan0JyP')
+// const stripePromise = loadStripe('pk_test_51O9wNVBwM0XCzFWGs1UJCn7IqgvQM8pEx0dJSQ0tszXRi8v4YlekI3vvQVP7iEghQ2msfEbXDn9r3xx6NNdym0yG00HHan0JyP')
 
 
 
 function App() {
   let [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [clientSecret, setClientSecret] = useState("");
+  const [clientSecret, setClientSecret] = useState("1234");
   let [donorCredentials, setDonorCredentials] = useState([]);
-  const [emailAddress, setEmailAddress]=useState("kimani.mbatia@student.moringaschool.com");
+  // const [emailAddress, setEmailAddress]=useState("kimani.mbatia@student.moringaschool.com");
 
 
-        useEffect(() => {
-        // Create PaymentIntent as soon as the page loads
-        fetch("https://hopeharbour-api.onrender.com/onetimepay/pay", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: emailAddress}),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            //console.log(typeof data.client_secret)
-            //console.log(data.client_secret)
-            setClientSecret(data.client_secret)
-            console.log(clientSecret)
-            //alert(clientSecret)
-          } )
-          .catch(error=>{alert(error)})
-      }, []);
+      //   useEffect(() => {
+      //   // Create PaymentIntent as soon as the page loads
+      //   fetch("https://hopeharbour-api.onrender.com/onetimepay/pay", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({ email: emailAddress}),
+      //   })
+      //     .then((res) => res.json())
+      //     .then((data) => {
+      //       //console.log(typeof data.client_secret)
+      //       //console.log(data.client_secret)
+      //       setClientSecret(data.client_secret)
+      //       console.log(clientSecret)
+      //       //alert(clientSecret)
+      //     } )
+      //     .catch(error=>{alert(error)})
+      // }, []);
 
 /*   useEffect(function(){
     setDonorCredentials(false)
@@ -82,29 +82,40 @@ function App() {
   return (
     <div>
       {clientSecret &&(
-              <Elements options={options} stripe={stripePromise}>
-              <Navbar isLoggedIn={isLoggedIn} donorCredentials={donorCredentials} />
+              // <Elements options={options} stripe={stripePromise}>
+              <>
+                <Navbar isLoggedIn={isLoggedIn} donorCredentials={donorCredentials} />
               <Routes>
                 <Route path="/" element={<Home />}/>
                 <Route path="/signup" element={<SignUp />}/>
                 <Route path="/registercharity" element={<RegisterCharity />}/>
                 <Route path="/login" element={<Login setDonorCredentials={setDonorCredentials} setLoginStatus={setLoginStatus} />}/>
-                <Route path="/donorMainPage" element={<DonorMainPage donorCredentials={donorCredentials}  />}>
-                  <Route path="details" element={<DonorPageDetails />}></Route>
-                  <Route path="donate" element={<DonorPageDonate />}>
-                    <Route path='payment' element={<DonorPagePayment />}>
-                      </Route>
-                  </Route>
-                </Route>
-                <Route path='/success' element={<DonorPageSuccess />}></Route>
+                {isLoggedIn? (
+                  <>
+                                <Route path="/donorMainPage" element={<DonorMainPage donorCredentials={donorCredentials}  />}>
+                                  <Route path="details" element={<DonorPageDetails />}></Route>
+                                  <Route path="donate" element={<DonorPageDonate />}>
+                                    <Route path='payment' element={<DonorPagePayment />}>
+                                      </Route>
+                                  </Route>
+                                </Route>
+                                <Route path='/success' element={<DonorPageSuccess />}></Route>
+                              {donorCredentials.role =="charity"}
+                                <Route path="/charityMainPage" element={<CharityPageMain />}>
+                                  <Route path="details" element={<CharityPageDetails />}></Route>
+                                </Route>
+                  </>
 
-                <Route path="/charityMainPage" element={<CharityPageMain />}>
-                  <Route path="details" element={<CharityPageDetails />}></Route>
-                </Route>
+                ):(
+                  <></>
+                )}
+
                 <Route path="/admin" element={<AdminPageDashboard/>}></Route>
               </Routes>
               <Footer />
-             </Elements>
+              </>
+              
+            //  </Elements>
       )}
 
     </div> 
